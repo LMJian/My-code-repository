@@ -1,0 +1,26 @@
+#include<stdio.h>
+int main()
+{
+	char a[99];
+	char b=0;
+	int c=0,d=0,i,k=1;
+	b=getchar();
+	while(b!='@')
+	{
+		a[c]=b;
+		c++;
+		b=getchar();
+	}
+	while(a[d]!='&')
+	d++;
+	for(i=d-1;i>=0;i--)
+	{
+		if(a[i]!=a[2*d-i])
+		k=0;
+		
+	}
+	if(k==1)
+	printf("是回文序列");
+	else
+	printf("不是回文序列"); 
+}
