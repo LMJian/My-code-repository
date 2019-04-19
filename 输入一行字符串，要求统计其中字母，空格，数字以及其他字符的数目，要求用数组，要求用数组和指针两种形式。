@@ -1,0 +1,32 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+void count(char str[])
+{
+	int a, b, c, d;
+	a = b = c = d = 0;//计数器初始化为0.
+	char *p;
+	p = str;
+	while (*p != NULL)//循环读取字符，到换行结束。
+	{
+		if (*p >= '0' &&*p <= '9')//数字
+			a++;
+		else if ((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z'))//字母
+			b++;
+		else if (*p == ' ')//空格
+			c++;
+		else //其它
+			d++;
+		p++;
+	}
+	printf("数字:%d\n字母:%d\n空格:%d\n其他字符:%d\n", a, b, c, d);//输出结果。
+}
+int main()
+{
+	char str[99];
+	printf("请输字符串：\n");
+	gets_s(str);
+	count(str);
+	system("pause");
+	return 0;
+}
