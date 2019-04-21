@@ -1,0 +1,43 @@
+题目如下
+s01串初始为"0"
+　　按以下方式变换
+　　0变1，1变01
+输入格式
+　　1个整数(0~19)
+输出格式
+　　n次变换后s01串
+样例输入
+3
+样例输出
+101
+数据规模和约定
+　　0~19
+
+代码如下
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	int i;
+	char a[99] = "0";
+	char b[99] = "1";
+	char c[99];
+	printf("请输入一个数");
+	scanf("%d", &i);
+	if (i == 0)
+		printf("0");
+	else if (i == 1)
+		printf("1");
+	else
+	{
+		while (i != 1)
+		{
+			strcpy(c, a);
+			strcat(c, b);
+			strcpy(a, b);
+			strcpy(b, c);
+			i--;
+		}
+		printf("%s", c);
+	}
+}
