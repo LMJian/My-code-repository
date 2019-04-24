@@ -1,0 +1,18 @@
+水仙花数是指一个三位数,其各位数字立方和等于该数本身
+
+代码
+#include<stdio.h>
+#include<math.h>
+#include<stdlib.h>
+int main()
+{
+	int n,a=0,b=0,c=0;
+	printf("水仙花有；\n");
+	for (n = 100; n < 1000; n++)
+	{
+		a = n % 10; b = n / 100; c = n / 10 % 10;
+		if (n == pow(a, 3) + pow(b, 3) + pow(c, 3))
+			printf("%d\n", n);
+	}
+	system("pause");
+}
