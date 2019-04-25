@@ -1,0 +1,18 @@
+#include<stdio.h>
+int main()
+{
+	char a[99];
+	printf("请输入需要转换的字符串\n");
+	gets(a);
+	int i=0;
+	while(a[i]!=NULL)
+	{
+		if((a[i]>='a')&&(a[i]<='z'))
+		a[i]=a[i]-32;
+		else if((a[i]>='A')&&(a[i]<='Z'))
+		a[i]=a[i]+32;
+		printf("%c",a[i]);
+		i++;
+	 } 
+   return 0;
+}
