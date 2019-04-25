@@ -1,0 +1,35 @@
+素数的6定理
+即除过素数2，3，其他素数都在6n+1和6n-1的位置上，找素数时只需判断这些位置上的数是否为素数即可，大大降低了时间复杂度。
+
+代码如下
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+int Prime(int n)
+{
+	int t = 1, i;
+	for (i = 3; i <= sqrt(n); i = i + 2)//奇数的因子只能是奇数
+	{
+		if (n%i == 0)
+		{
+			t = 0;
+			break;
+		}
+	}
+	return t;
+}
+int main()
+{
+	int n, i, num = 2;
+	scanf("%d", &n);
+	for (i = 3; i <= n; i = i + 2)//除过2，只判断奇数是否为素数
+	{
+		if (Prime(i) == 1)
+			num += i;
+
+	}
+	printf("%d\n", num);
+	system("pause");
+	return 0;
+}
