@@ -1,0 +1,43 @@
+问题描述
+Fibonacci数列的递推公式为：Fn=Fn-1+Fn-2，其中F1=F2=1。
+输入一个整数n，输出一个整数，表示Fn除以10007的余数。
+
+说明：在本题中，答案是要求Fn除以10007的余数，因此我们只要能算出这个余数即可，而不需要先计算出Fn的准确值，再将计算的结果除以10007取余数，直接计算余数往往比先算出原数再取余简单。
+
+代码
+#include<stdio.h>
+#include<stdlib.h>
+int n, i, f[1000000];
+int main()
+{
+	scanf_s("%d", &n);
+	f[1] = f[2] = 1;
+	for (i = 3; i <= n;i++)
+	f[i] = (f[i - 1] + f[i - 2]) % 10007;
+	printf("%d\n", f[n]);
+	system("pause");
+	return 0;
+}
+
+递归传值
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>	
+
+int count(int n)
+{
+	int t = 0;
+	if (n == 1 || n == 2)
+		t = 1;
+	else
+		t = (count(n - 2) + count(n - 1)) % 10007;
+	return t;
+}
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	printf("%d\n", count(n));
+	system("pause");
+	return 0;
+}
