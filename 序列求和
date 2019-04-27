@@ -1,0 +1,24 @@
+问题描述
+求1+2+3+…+n的值
+
+说明：
+请注意这里的数据规模。
+直接使用一个循环来累加，这种“暴力”的方法往往会导致超时。
+
+注意答案的大小不在整型(int)范围内，如果使用整型来保存结果，会导致结果错误。
+如果你使用C语言而且准备使用printf输出结果，则你的格式字符串应该写成%I64d以输出long long类型的整数！！！
+
+代码
+#include<stdio.h>
+#include<stdlib.h>
+
+int main()
+{
+	int n;
+	long long tmp;
+	scanf_s("%d", &n);
+	tmp = n;
+	printf("%I64d\n", (1 + tmp) * tmp / 2);
+	system("pause");
+	return 0;
+}
