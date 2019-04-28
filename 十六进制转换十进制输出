@@ -1,0 +1,29 @@
+问题描述
+从键盘输入一个不超过8位的正的十六进制数字符串，将它转换为正的十进制数后输出。
+　　注：十六进制数中的10~15分别用大写的英文字母A、B、C、D、E、F表示。
+样例输入
+FFFF
+样例输出
+65535
+
+代码
+#include<stdio.h>
+#include<math.h>
+#include<string.h>
+int main()
+{
+	int len,i,k=0;
+	long long t=0;
+	char a[8]="";
+	scanf("%s",&a);
+	len=strlen(a);
+	for(i=len-1;i>=0;i--)
+	{
+		if(a[i]>='A'&&a[i]<='F')
+		t+=(a[i]-'7')*pow(16,k++);
+		if(a[i]>='0'&&a[i]<='9')
+		t+=(a[i]-'0')*pow(16,k++);
+	}
+	printf("%I64d\n",t);
+	return 0;
+}
