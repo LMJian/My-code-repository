@@ -1,0 +1,23 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#define n 10
+int main()
+{
+	int a[n] = { 0,1,2,3,4,5,6,7,8,9 };
+	int k, t = 0, i, j;
+	scanf("%d", &k);
+	for (i = 0; i < k; i++)
+	{
+		t = a[n - 1];
+		for (j = n - 1; j >= 1; j--)
+			a[j] = a[j - 1];
+		a[0] = t;
+	}
+	for (i = 0; i < n; i++)
+	{
+		printf("%d", a[i]);
+	}
+	system("pause");
+	return 0;
+}
