@@ -1,0 +1,48 @@
+问题描述
+设计算法，用户输入合数，程序输出若个素数的乘积。
+例如，输入6，输出2 * 3。输入20，输出2 * 2 * 5。
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>	
+#include<math.h>
+int Prime(int n)
+{
+	int i, t = 1;
+	if (n != 2 && n % 2 == 0)//先判断是不是非2的偶数，如果是则肯定不是素数 
+		t = 0;
+	else
+	{
+		for (i = 3; i <= sqrt(n); i = i + 2)//判断奇数是不是素数，只需判断奇数因子，因为奇数如果有因子肯定是奇数 
+		{
+			if (n%i == 0)
+			{
+				t = 0;
+				break;
+			}
+		}
+	}
+	return t;
+}
+
+int main()
+{
+
+	int n, i;
+	scanf("%d", &n);
+	for (i = 2; i <= n; i++)
+	{
+		if (n%i == 0 && Prime(i) == 1)
+		{
+			if (n / i == 1)
+				printf("%d", i);
+			else
+				printf("%d*", i);
+			n /= i;
+			i = i - 1;
+		}
+	}
+	system("pause");
+	return 0;
+}
