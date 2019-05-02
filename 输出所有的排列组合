@@ -1,0 +1,33 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>	
+
+const int len = 3;
+void print(int *a, int r)
+{
+	int j, tem = 0;
+	if (1 == r)
+	{
+		for (int i = 0; i < len; i++)
+			printf("%d", a[i]);
+		printf("\n");
+		return;
+	}
+	print(a, r - 1);
+	for (j = 0; j < r - 1; j++)
+	{
+		tem = a[j];
+		a[j] = a[r - 1];
+		a[r - 1] = tem;
+		print(a, r - 1);
+		a[r - 1] = a[j];
+		a[j] = tem;
+	}
+}
+int main()
+{
+	int a[len] = { 1,2,3 };
+	print(a, len);
+	system("pause");
+	return 0;
+}
