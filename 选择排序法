@@ -1,0 +1,28 @@
+代码
+#include<stdio.h>
+int main()
+{
+	int n, i,j,a[999],k,t,min;	
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+	scanf("%d", &a[i]);
+	for(j=0;j<n;j++)
+	{
+	min=a[j];
+	t=j;
+	for (i = j+1; i < n; i++)
+	{
+		if(a[i]<min)
+		{
+			min=a[i];
+			t=i;
+		}
+	}
+	k=a[j];
+	a[j]=a[t];
+	a[t]=k;
+	}
+	for (i = 0; i < n; i++)
+	printf("%d\t", a[i]);
+	return 0; 
+}
