@@ -1,0 +1,48 @@
+#include<stdio.h>
+void xier(int a[], int n, int delta)
+{
+	int i, j, t;
+	for (i = delta; i < n; i++)
+	{
+		j = i;
+		while ((a[j] < a[j - delta]) && (j >= delta))
+		{
+			t = a[j];
+			a[j] = a[j - delta];
+			a[j - delta] = t;
+			j = j - delta;
+		}
+	}
+}
+void xxx(int a[], int n, int delta[], int m)
+{
+	int i;
+	for (i = 0; i < m; i++)
+		xier(a, n, delta[i]);
+}
+int main()
+{
+	int a[99], delta[9];
+	int n, m = 0, i, t;
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+		scanf("%d", &a[i]);
+
+	t = n;
+	while (t != 1)
+	{
+		m++;
+		t = t / 2;
+	}
+	t = n;
+	for (i = 0; i < m; i++)
+	{
+		delta[i] = t / 2;
+		t = t / 2;
+	}
+
+	xxx(a, n, delta, m);
+	for (i = 0; i < n; i++)
+		printf("%d\t", a[i]);
+	return 0;
+}
