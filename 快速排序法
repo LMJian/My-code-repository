@@ -1,0 +1,50 @@
+#include<stdio.h>
+
+int QKS(int a[], int low, int high)
+{
+	int x;
+	x = a[low];
+	while (low < high)
+	{
+		while ((a[high] >= x) && (low < high))
+			high--;
+		if (low < high)
+		{
+			a[low] = a[high];
+			low++;
+		}
+		while ((a[low] < x) && (low < high))
+			low++;
+		if (low < high)
+		{
+			a[high] = a[low];
+			high--;
+		}
+	}
+	a[low] = x;
+	return low;
+}
+
+void QK(int a[], int low, int high)
+{
+	int pos;
+	if (low < high)
+	{
+		pos = QKS(a, low,high);
+		QK(a, low, pos - 1);
+		QK(a, pos + 1, high);
+	}
+}
+
+int main()
+{
+	int n, i, a[200], low, high;
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+		scanf("%d", &a[i]);
+	low = 0; high = n - 1;
+	QK(a, low, high);
+	for (i = 0; i < n; i++)
+		printf("%d\t", a[i]);
+	return 0;
+}
