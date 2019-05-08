@@ -1,0 +1,119 @@
+问题描述
+若一个数（首位不为零）从左向右读与从右向左读都一样，我们就将其称之为回文数。
+　　例如：给定一个10进制数56，将56加65（即把56从右向左读），得到121是一个回文数。
+
+又如：对于10进制数87：
+　　STEP1：87+78 = 165 STEP2：165+561 = 726
+　　STEP3：726+627 = 1353 STEP4：1353+3531 = 4884
+
+在这里的一步是指进行了一次N进制的加法，上例最少用了4步得到回文数4884。
+
+写一个程序，给定一个N（2<=N<=10或N=16）进制数M（其中16进制数字为0-9与A-F），求最少经过几步可以得到回文数。
+　　如果在30步以内（包含30步）不可能得到回文数，则输出“Impossible!”
+输入格式
+　　两行，N与M
+输出格式
+　　如果能在30步以内得到回文数，输出“STEP=xx”（不含引号），其中xx是步数；否则输出一行”Impossible!”（不含引号）
+
+样例输入
+9
+87
+
+样例输出
+STEP=6
+
+思路
+用数组来存储数，每一个元素代表一位，不管是多少进制，将数组元素统一转为十进制，用来表示每一位上的数字。相加后依次判断是否有进位，处理进位后判断是否为回文数，循环此过程即可
+
+给出蓝桥杯系统测试的几组数据
+2 10011 STEP=4
+16 AC27 STEP=6
+10 89 STEP=24
+2 101111 Impossible!
+
+容易犯的错误
+进位是时常将mm[i + 1] += mm[i] / n;写成mm[i + 1] = mm[i] / n;导致错误
+在将16位转为十进制数时只考虑到了字母的情况，直接统一减了‘7’导致错误
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<string.h> 
+int mm[100] = { 0 };
+int len;
+
+int panduan()
+{
+	int t = 1, i;
+	for (i = 0; i < len / 2; i++)
+	{
+		if (mm[i] != mm[len - 1 - i])
+		{
+			t = 0;
+			break;
+		}
+	}
+	return t;
+}
+int zhuan(int n)
+{
+	int b[100] = { 0 };
+	int i;
+	for (i = 0; i < len; i++)
+		b[i] = mm[len - 1 - i];
+	for (i = 0; i < len; i++)
+		mm[i] += b[i];
+	for (i = 0; i < len; i++)
+	{
+		if (mm[i] / n != 0)
+		{
+			mm[i + 1] += mm[i] / n;
+			mm[i] = mm[i] % n;
+			if (i == len - 1)
+				len++;
+		}
+	}
+	if (panduan() == 1)
+		return 1;
+	else
+		return 0;
+}
+
+
+int main()
+{
+	int n, i;
+	char m[100] = "";            //n进制的m数 
+	scanf("%d%s", &n, &m);
+	len = strlen(m);
+	if (n == 16)
+	{
+		for (i = 0; i < len; i++)
+		{
+			if(m[len - 1 - i]>='A')
+				mm[i] = m[len - 1 - i] - '7';
+			else
+				mm[i] = m[len - 1 - i] - '0';
+
+		}
+	}
+	else
+	{
+		for (i = 0; i < len; i++)
+		{
+			mm[i] = m[len - 1 - i] - '0';
+		}
+	}
+	for (i = 0; i < 30; i++)
+	{
+		if (zhuan(n) == 1)
+			break;
+	}
+	if (i < 30)
+		printf("STEP=%d\n", i + 1);
+	else
+		printf("Impossible!\n");
+	return 0;
+}
+思考
+一定要注意细节啊，数组没有初始化有时候就能导致严重错误！！！
