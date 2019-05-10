@@ -1,0 +1,26 @@
+代码
+#include<stdio.h> 
+int main()
+{
+	int n,m,i,k;
+	int a[99]={0};
+	scanf("%d %d",&n,&m);
+	for(i=0;i<n;i++)
+	scanf("%d",&a[i]);
+	i=-1;k=n;
+	while(n)
+	{
+		while(m)
+		{
+			i=(i+1)%k;
+			if(a[i]==-1)
+			m++;
+			m--;
+		}
+		printf("%d",i+1);
+		m=a[i];
+		a[i]=-1;
+		n--;
+	}
+	return 0;
+}
