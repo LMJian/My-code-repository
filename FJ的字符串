@@ -1,0 +1,60 @@
+问题描述
+FJ在沙盘上写了这样一些字符串：
+　　A1 = “A”
+　　A2 = “ABA”
+　　A3 = “ABACABA”
+　　A4 = “ABACABADABACABA”
+　　… …
+　　你能找出其中的规律并写所有的数列AN吗？
+输入格式
+　　仅有一个数：N ≤ 26。
+输出格式
+　　请输出相应的字符串AN，以一个换行符结束。输出中不得含有多余的空格或换行、回车符。
+样例输入
+3
+样例输出
+ABACABA
+
+代码
+非递归算法
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char a[100000]="A",b[100000]="";
+	int i,n,len;
+	scanf("%d",&n);
+	for(i=2;i<=n;i++) 
+	{
+		strcpy(b,a);
+		len=strlen(b);
+		b[len]=64+i;
+		strcat(b,a);
+		strcpy(a,b);
+	}
+	printf("%s\n",a);
+	return 0;
+}
+递归
+此类递归打印的问题要注意在哪打印，还有要十分注意出口！！！！
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+void count(int n)
+{
+	if (n == 0)
+		return;
+	count(n - 1);
+	printf("%c", 64 + n);
+	count(n - 1);
+}
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	count(n);
+	system("pause");
+	return 0;
+}
