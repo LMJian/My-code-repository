@@ -1,0 +1,24 @@
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+int count(int n)
+{
+	int f = 0;
+	if (n == 1)
+		f = 1;
+	else
+		f = n + count(n - 1);
+	return f;
+}
+int main()
+{
+	int n, i, tt = 0;
+	scanf("%d", &n);
+	for (i = 1; i <= n; i++)
+		tt += i;
+	printf("%d\n", tt);
+	printf("%d\n", count(n));
+	return 0;
+}
