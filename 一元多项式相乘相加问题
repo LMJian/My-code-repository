@@ -1,0 +1,75 @@
+代码
+#include<stdio.h>
+int a[99][2]={0},b[99][2]={0};
+int max1,max2,min1,min2;
+int p[99]={0},m[99]={0},tc[99]={0},tj[99]={0};
+
+void cheng()
+{
+	int i,j,max,min;
+	max=max1+max2;
+	min=min1+min2;
+	for(i=0;i<=max;i++)
+	for(j=0;j<=i;j++)
+		tc[i]+=p[j]*m[i-j];
+	printf("多项式相乘结果为；"); 
+	for(i=max;i>min;i--)
+	if(tc[i]!=0) 
+	printf("(%dx%d)+",tc[i],i);
+	if(min!=0)
+	printf("(%dx%d)",tc[min],min);
+	else
+	printf("(%d)",tc[min]);
+	printf("\n");
+	return;
+ } 
+ 
+void jia()
+{
+	int max,i,min;
+	max=max1;
+	min=min1;
+	if(min2<min1)
+	min=min2;
+	if(max2>max1)
+	max=max2;
+	for(i=0;i<=max;i++)
+	tj[i]=p[i]+m[i];
+	printf("多项式相加结果为；"); 
+	for(i=max;i>min;i--)
+	if(tj[i]!=0)
+	printf("(%dx%d)+",tj[i],i);
+	if(min!=0)
+	printf("(%dx%d)",tj[min],min);
+	else
+	printf("(%d)",tj[min]);
+	printf("\n");
+	return;
+}
+
+int main()
+{
+	int a1,b1,i;
+	printf("请输入第一个多项式的项数");
+	scanf("%d",&a1);
+	printf("请按指数大小依次输入系数和指数");
+	for(i=0;i<a1;i++)
+	scanf("%d%d",&a[i][0],&a[i][1]);
+	printf("请输入第二个多项式的项数");
+	scanf("%d",&b1);
+	printf("请按指数大小依次输入系数和指数");
+	for(i=0;i<b1;i++)
+	scanf("%d%d",&b[i][0],&b[i][1]);
+	
+	for(i=0;i<a1;i++)
+	p[a[i][1]]=a[i][0];
+	for(i=0;i<b1;i++)
+	m[b[i][1]]=b[i][0];
+	max1=a[a1-1][1];
+	min1=a[0][1];
+	max2=b[b1-1][1];
+	min2=b[0][1];
+	cheng();
+	jia();
+	return 0; 	
+} 
