@@ -1,0 +1,14 @@
+代码
+void nixu(linklist l)        // l为第一个元素，主函数调用时应该注意
+{
+	node *p = l;
+	if (p->next != NULL)
+	{
+		nixu(p->next);
+		printf("%d", p->data);
+	}
+	else
+	{
+		printf("%d", p->data);
+	}
+}
