@@ -1,0 +1,79 @@
+问题描述
+给定一个长度为n的字符串S，还有一个数字L，统计长度大于等于L的出现次数最多的子串（不同的出现可以相交），如果有多个，输出最长的，如果仍然有多个，输出第一次出现最早的。
+输入格式
+　　第一行一个数字L。
+　　第二行是字符串S。
+　　L大于0，且不超过S的长度。
+输出格式
+　　一行，题目要求的字符串。
+
+输入样例1：
+　　4
+　　bbaabbaaaaa
+
+输出样例1：
+　　bbaa
+
+输入样例2：
+　　2
+　　bbaabbaaaaa
+
+输出样例2：
+　　aa
+数据规模和约定
+　　n<=60
+　　S中所有字符都是小写英文字母。
+提示
+　　枚举所有可能的子串，统计出现次数，找出符合条件的那个
+
+代码
+#include<stdio.h>
+#include<string.h>
+#define max 100000
+int main()
+{
+	char s[60] = { 0 }, a[max][60] = { 0 };//s存储输入的字符串，a存储满足要求的所有子串 
+	int l, slen, alen = 0;//slen是字符串s的长度，alen是a中子串的个数 
+	int i, j, k;
+	int ashu[max] = { 0 };//ashu数组存储的是与a中对应下标子串的个数 
+	scanf("%d", &l);
+	scanf("%s", s);
+	slen = strlen(s);
+	for (i = l; i < slen; i++)//子串所有长度的可能 
+	{
+		for (j = 0; j <= slen - i; j++)//子串开始的下标 
+		{
+			char t[60] = { 0 }; int txia = 0;//t为截取的子串 
+			for (k = j; k < j + i; k++)
+				t[txia++] = s[k];
+			
+			int tt = 0;             //标记新的子串在子串库a中是否有 
+			for (k = 0; k < alen; k++)//搜索子串库a 
+				if (strcmp(a[k], t) == 0)
+				{
+					ashu[k]++;//在对应下标的ashu数组加1，记录这个子串的个数 
+					tt = 1;
+					break; 
+				}
+			if (tt == 0)//表示是新的子串 
+			{
+				for (k = 0; k < i; k++)//加入子串库a 
+				a[alen][k] = t[k];
+				ashu[alen] = 1; 
+				alen++;
+			}
+		}
+	}
+	int maxzhi = 0, maxx;//maxzhi表示出现次数最多的子串，maxx表示下标 
+	for (i = alen - 1; i >= 0; i--)//从后搜索 ，因为出现次数相同的情况下输出长度大的子串 
+		if (ashu[i] > maxzhi)
+		{
+			maxzhi = ashu[i];
+			maxx = i;
+		}
+	for(i=maxx-1;i>=0;i--)//出现次数相同，子串长度相同的情况下往前搜索 
+	if(ashu[i]==ashu[maxx]&&strlen(a[i])==strlen(a[maxx]))
+	maxx=i;
+	printf("%s\n", a[maxx]);
+	return 0;
+}
