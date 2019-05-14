@@ -1,0 +1,40 @@
+算法分析设计
+一个盘子时：A->B
+两个盘子时：A->C A->B C->B
+分析递归时并不需要分析很多项，其实分析第三项时就已经很头晕， 前两项已经很容易看出递归思路
+void hanoi(int n,char a,char b,char c)
+{
+if(n==1)
+{
+printf("%c->%c\n",a,b);
+return;
+}
+else
+{
+hanoi(n-1,a,c,b);
+printf("%c->%c\n",a,b);
+hanoi(n-1,c,b,a);
+}
+}
+
+代码
+#include<stdio.h>
+void hanoi(int n,char a,char b,char c)
+{
+	if(n==1)
+	{
+		printf("%c->%c\n",a,b);
+		return;
+	}
+	else
+	{
+		hanoi(n-1,a,c,b);
+		printf("%c->%c\n",a,b);
+		hanoi(n-1,c,b,a); 
+	 } 
+}
+int main()
+{
+	hanoi(64,'a','b','c');
+	return 0;
+}
