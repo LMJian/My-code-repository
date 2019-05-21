@@ -1,0 +1,52 @@
+
+6x6的方格，沿着格子的边线剪开成两部分。
+要求这两部分的形状完全相同。
+如图：p1.png, p2.png, p3.png 就是可行的分割法。
+试计算：
+包括这3种分法在内，一共有多少种不同的分割方法。
+注意：旋转对称的属于同一种分割法。
+请提交该整数，不要填写任何多余的内容或说明文字。
+
+
+
+算法描述
+
+不要想方块，要想象成7*7个端点组成的网状结构，用二维数组去模拟出发点为中心的3.3点，因为是正方形且为中心对称，所以需要考虑中心对称去重，即bg[i][j]与bg[6-i][6-j]相对于中心点3.3对称，所以需要走一步改变两点；
+答案是509
+
+代码
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int bg[7][7];
+int a2[4][2] = { 0,1,1,0,0,-1,-1,0 };
+int sum = 0;
+void dfs(int x, int y)
+{
+	if (x == 0 || x == 6 || y == 0 || y == 6)/*跳出循环的条件，也是裁剪完毕的标志*/
+	{
+		sum++; return;
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		int x1 = x + a2[i][0];
+		int y1 = y + a2[i][1];
+		if (bg[x1][y1] != 0)continue;
+		bg[x1][y1] = 1;
+		bg[6 - x1][6 - y1] = 1;
+		dfs(x1, y1);
+		bg[x1][y1] = 0;
+		bg[6 - x1][6 - y1] = 0;
+	}
+}
+int main()
+{
+	memset(bg, 0, sizeof(bg));//初始化数组元素为0,头文件string.h
+	bg[3][3] = 1;            
+	dfs(3, 3);
+	printf("%d\n", sum / 4);
+	system("pause");
+	return 0;
+}
