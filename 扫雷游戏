@@ -1,0 +1,177 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<windows.h>
+#define ROW 7
+#define COL 7
+#define mine  4 * (ROW - 2)*(COL - 2) / 10//埋雷个数，控制比列
+
+void SetMine(char mine_board[ROW][COL])//埋雷函数
+{
+	srand((unsigned long)time(NULL));
+	int sum = mine;
+	int x, y;
+	while (sum)
+	{
+		x = rand() % (ROW - 2) + 1;
+		y = rand() % (COL - 2) + 1;
+		if (mine_board[x][y] == '0')
+		{
+			sum--;
+			mine_board[x][y] = '*';
+		}
+	}
+}
+void CountMine(char mine_board[ROW][COL])//给安全位置标数字
+{
+	int i, j, p1, p2, sum;
+	for (i = 1; i < ROW - 1; i++)
+	{
+		for (j = 1; j < COL - 1; j++)
+		{
+			sum = 0;
+			if (mine_board[i][j] != '*')
+			{
+				for (p1 = i - 1; p1 <= i + 1; p1++)
+				{
+					for (p2 = j - 1; p2 <= j + 1; p2++)
+					{
+						if (mine_board[p1][p2] == '*')
+							sum++;
+					}
+				}
+				mine_board[i][j] = sum + '0';
+			}
+		}
+	}
+}
+void Show(char show_board[ROW][COL])//打印函数
+{
+	int i, j;
+	printf("    1   2   3   4   5   6   7   8   9   10\n");
+	printf("--------------------------------------------\n");
+	for (i = 1; i < ROW - 1; i++)
+	{
+		printf("%2d|", i);
+		for (j = 1; j < COL - 1; j++)
+		{
+			printf(" %c |", show_board[i][j]);
+		}
+		printf("\n");
+		printf("--------------------------------------------\n");
+	}
+}
+void Expand(char Tmine_board[ROW][COL], char show_board[ROW][COL], int x, int y)//把选中位置挨着的安全区域标识出来，在showboard上显示出来
+{
+	if (x < 1 || x>ROW - 2 || y < 1 || y>COL - 2 || Tmine_board[x][y] == '*')
+		return;
+	else
+	{
+		show_board[x][y] = Tmine_board[x][y];
+		Tmine_board[x][y] = '*';
+	}
+	Expand(Tmine_board, show_board, x + 1, y);
+	Expand(Tmine_board, show_board, x - 1, y);
+	Expand(Tmine_board, show_board, x, y + 1);
+	Expand(Tmine_board, show_board, x, y - 1);
+}
+int Judge(char show_board[ROW][COL])//判断是否赢了
+{
+	int sum = 0;
+	for (int i = 1; i < ROW - 1; i++)
+	{
+		for (int j = 1; j < COL - 1; j++)
+		{
+			if (show_board[i][j] == '?')
+			{
+				sum++;
+			}
+		}
+	}
+	if (sum == mine)
+		return 1;
+	else
+		return 0;
+}
+void PlayGame(char mine_board[ROW][COL], char show_board[ROW][COL])
+{
+	char Tmine_board[ROW][COL];//创建一个和雷区数组一样的数组，用来后面递归函数使用
+	memset(Tmine_board, '0', sizeof(Tmine_board));
+	int i, j;
+	for (i = 1; i < ROW - 1; i++)
+	{
+		for (j = 1; j < COL - 1; j++)
+		{
+			Tmine_board[i][j] = mine_board[i][j];
+		}
+	}
+	int x, y, key = 1;
+	while (key)
+	{
+		scanf("%d%d", &x, &y);
+		if (mine_board[x][y] == '*')
+		{
+			if (key == 1)
+			{
+				printf("此处有雷，重新输入\n");
+				Show(show_board);
+				key++;
+			}
+			else
+			{
+				printf("游戏结束\n");
+				Show(mine_board);
+				key = 0;
+			}
+		}
+		else
+		{
+			key++;
+			Expand(Tmine_board, show_board, x, y);//把选中位置挨着的安全区域标识出来，在showboard上显示出来
+			Show(show_board);
+			if (Judge(show_board) == 1)//判断是否赢了
+			{
+				key = 0;
+				printf("你赢了\n");
+			}
+		}
+	}
+}
+void play()
+{
+	char mine_board[ROW][COL];
+	char show_board[ROW][COL];
+	memset(show_board, '?', sizeof(show_board));
+	memset(mine_board, '0', sizeof(mine_board));
+	SetMine(mine_board);//埋雷函数
+	CountMine(mine_board);//给安全位置标数字
+	Show(show_board);//打印函数
+	PlayGame(mine_board, show_board);
+}
+int main()
+{
+	int key = 1;
+	int menu = 0;
+	while (key)
+	{
+		printf("#######################\n");
+		printf("###1 play   2 excit ###\n");
+		printf("#######################\n");
+		scanf("%d", &menu);
+		switch (menu)
+		{
+		case 1:
+			play();
+			break;
+		case 2:
+			key = 0;
+			break;
+		default:
+			printf("输入有误，请重新输入\n");
+			break;
+		}
+	}
+	system("pause");
+	return 0;
+}
