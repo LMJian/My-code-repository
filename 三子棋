@@ -1,0 +1,158 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<windows.h>
+#include<time.h>
+void Player(char board[3][3]);
+
+void Show(char board[3][3])
+{
+	int i, j;
+	printf("   1   2   3\n");
+	printf("--------------\n");
+	for (i = 0; i < 3; i++)
+	{
+		printf("%d|",i+1);
+		for (j = 0; j < 3; j++)
+			printf(" %c |", board[i][j]);
+		printf("\n");
+		printf("--------------\n");
+	}
+}
+char Judge(char board[3][3])
+{
+	int i, j, t = 1;
+	for (i = 0; i < 3; i++)
+	{
+		if (board[i][0] == board[i][1] && board[i][1] == board[i][2])
+			return board[i][0];
+		if (board[0][i] == board[1][i] && board[1][i] == board[2][i])
+			return board[0][i];
+	}
+	if (board[0][0] == board[1][1] && board[1][1] == board[2][2])
+		return board[0][0];
+	if (board[0][2] == board[1][1] && board[1][1] == board[2][0])
+		return board[0][2];
+	for (i = 0; i < 3; i++)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			if (board[i][j] == '0')
+			{
+				t = 0;
+				break;
+			}
+		}
+	}
+	if (t == 1)
+		return 'T';
+	return '\0';
+}
+void Robot(char board[3][3])
+{
+	srand((unsigned long)time(NULL));
+	int x, y;
+	int key = 1;
+	while (key)
+	{
+		x = rand() % 3 ;
+		y = rand() % 3 ;
+		if (board[x][y] == '0')
+		{
+			board[x][y] = 'R';
+			key = 0;
+		}
+	}
+	Show(board);
+	if (Judge(board) == 'R')
+	{
+		printf("你输了\n");
+		return;
+	}
+	if (Judge(board) == 'T')
+	{
+		printf("平局\n");
+		return;
+	}
+	Player(board);
+}
+void Player(char board[3][3])
+{
+	int x, y;
+	int key = 1;
+	while (key)
+	{
+		printf("请输入下棋坐标：");
+		scanf("%d%d", &x, &y);
+		if (board[x-1][y-1] == '0')
+		{
+			board[x-1][y-1] = 'P';
+			key = 0;
+		}
+	}
+	Show(board);
+	if (Judge(board) == 'P')
+	{
+		printf("你赢了\n");
+		return;
+	}
+	if (Judge(board) == 'T')
+	{
+		printf("平局\n");
+		return;
+	}
+	Robot(board);
+}
+void Play()
+{
+	char board[3][3];
+	memset(board, '0', sizeof(board));
+	int key = 1, menu = 0;
+	Show(board);
+	while (key)
+	{
+		printf("请选择谁先下棋\n");
+		printf("### 1.电脑  2.玩家 ###\n");
+		scanf("%d", &menu);
+		switch (menu)
+		{
+		case 1:
+			Robot(board);
+			key = 0;
+			break;
+		case 2:
+			Player(board);
+			key = 0;
+			break;
+		default:
+			printf("输入有误，重新选择\n");
+			break;
+		}
+	}
+}
+int main()
+{
+	int key = 1;
+	int menu = 0;
+	while (key)
+	{
+		printf("##############################\n");
+		printf("#####  1 play   2 excit  #####\n");
+		printf("##############################\n");
+		scanf("%d", &menu);
+		switch (menu)
+		{
+		case 1:
+			Play();
+			break;
+		case 2:
+			key = 0;
+			break;
+		default:
+			printf("输入有误，请按要求输入\n");
+			break;
+		}
+	}
+	system("pause");
+	return 0;
+}
