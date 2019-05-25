@@ -1,0 +1,73 @@
+问题描述
+有一个字符数组的内容为:“student a am i”,
+请你将数组的内容改为"i am a student".
+要求：
+不能使用库函数。
+只能开辟有限个空间（空间个数和字符串的长度无关）。
+
+思考
+这个题没啥难度，也没有什么算法，此题用到了指针数组，毕竟是第一次使用，在某些题方面是有很大作用的，这个题也让我体会到了指针数组的作用
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+void place(char *left,char *right)
+{
+	char *str[10] = { 0 };
+	int len = 0;
+	char *start = left;
+	int i;
+	while (*start != '\0')
+	{
+		if (*start == ' ')
+			str[len++] = start;
+		start++;
+	}
+	str[len++] = ++right;
+	right--;
+	char *rig = str[0];
+	char *lef = left;
+	rig--;
+	while (lef < rig)
+	{
+		char t = *lef;
+		*lef = *rig;
+		*rig = t;
+		lef++;
+		rig--;
+	}
+	for (i = 0; i < len-1; i++)
+	{
+		char *a=str[i], *b=str[i+1];
+		a++;
+		b--;
+		while (a < b)
+		{
+			char t = *a;
+			*a = *b;
+			*b = t;
+			a++;
+			b--;
+		}
+	}
+	while (left < right)
+	{
+		char t = *left;
+		*left = *right;
+		*right = t;
+		left++;
+		right--;
+	}
+}
+int main()
+{
+	char a[] = "student a am i";
+	int len = strlen(a);
+	place(a,a+len-1);
+	printf("%s\n", a);
+	system("pause");
+	return 0;
+}
