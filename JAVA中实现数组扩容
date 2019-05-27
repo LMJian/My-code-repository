@@ -1,0 +1,47 @@
+Java数组扩容的原理
+1）Java数组对象的大小是固定不变的，数组对象是不可扩容的。
+
+2）利用数组复制方法可以变通的实现数组扩容。
+
+3）System.arraycopy()可以复制数组。
+
+4）Arrays.copyOf()可以简便的创建数组副本。
+
+5）创建数组副本的同时将数组长度增加就变通的实现了数组的扩容。
+
+代码
+package main;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input=new Scanner(System.in);
+        double[] grade = {};                               //**创建常量数据域**
+        boolean key=true;
+        while(key)
+        {
+            double temp=input.nextDouble();
+            if(temp<0)
+                key=false;
+            else
+            {
+                grade=Arrays.copyOf(grade, grade.length+1);                //**实现数组扩容**
+                grade[grade.length-1]=temp;
+            }
+        }
+        double average=0;
+        for(int i=0;i<grade.length;i++)
+            average+=grade[i]/grade.length;
+        int low=0,high=0;
+        for(int i=0;i<grade.length;i++)
+        {
+            if(grade[i]>=average)
+                high++;
+            else
+                low++;
+        }
+        System.out.println("大于等于平均分的有"+high+"名同学，小于平均成绩的有"+low+"名同学");       
+    }
+}
