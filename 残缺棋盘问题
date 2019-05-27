@@ -1,0 +1,106 @@
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#define length 16
+
+int maze[length][length] = { 0 };
+int x0 = 4, y0 = 8;
+int n = 1;
+
+int search(int LUX, int LUY, int RDX, int RDY)//搜索残缺棋在哪个区域
+{
+	int i, j;
+	for (i = LUX; i <=RDX; i++)
+	{
+		for (j = LUY; j <=RDY; j++)
+		{
+			if (maze[i][j] != 0)
+				goto LOOP;
+		}
+	}
+LOOP:
+	if (i <LUX+(RDX-LUX+1)/2)
+	{
+		if (j < LUY+(RDX - LUX + 1) / 2)
+			return 1;
+		else
+			return 2;
+	}
+	else
+	{
+		if (j < LUY+(RDX - LUX + 1) / 2)
+			return 3;
+		else
+			return 4;
+	}
+}
+
+void breach(int LUX, int LUY, int RDX, int RDY, int len)//递归填充函数
+{
+	if (len == 1)//出口
+		return;
+	n++;
+	if (search(LUX,LUY,RDX,RDY)== 1)//左上
+	{
+		maze[LUX + len][LUY + len] = n;
+		maze[LUX + len][LUY + len - 1] = n;
+		maze[LUX + len - 1][LUY + len] = n;
+	}
+	else if (search(LUX, LUY, RDX, RDY) == 2)//右上
+	{
+		maze[LUX + len][LUY + len] = n;
+		maze[LUX + len][LUY + len - 1] = n;
+		maze[LUX + len - 1][LUY + len - 1] = n;
+	}
+	else if (search(LUX, LUY, RDX, RDY) == 3)//左下
+	{
+		maze[LUX + len][LUY + len] = n;
+		maze[LUX + len - 1][LUY + len - 1] = n;
+		maze[LUX + len - 1][LUY + len] = n;
+	}
+	else if (search(LUX, LUY, RDX, RDY) == 4)//右下
+	{
+		maze[LUX + len - 1][LUY + len - 1] = n;
+		maze[LUX + len][LUY + len - 1] = n;
+		maze[LUX + len - 1][LUY + len] = n;
+	}
+	breach(LUX, LUY, LUX + len - 1, LUY + len - 1, len / 2);//左上区域
+	breach(LUX, LUY + len, LUX + len - 1, RDY, len / 2);//右上区域
+	breach(LUX + len, LUY, RDX, LUY + len - 1, len / 2);//左下区域
+	breach(LUX + len, LUY + len, RDX, RDY, len / 2);//右下区域
+}
+void out()//最后一步填充函数
+{
+	for (int i = 0; i < length - 1; i = i + 2)
+	{
+		for (int j = 0; j < length - 1; j = j + 2)
+		{
+			n++;
+			if (maze[i][j] == 0)
+				maze[i][j] = n;
+			if (maze[i + 1][j] == 0)
+				maze[i + 1][j] = n;
+			if (maze[i][j + 1] == 0)
+				maze[i][j + 1] = n;
+			if (maze[i + 1][j + 1] == 0)
+				maze[i + 1][j + 1] = n;
+		}
+	}
+}
+int main()
+{
+	maze[x0][y0] = 1;//初始残缺棋子位置
+	breach(0, 0, 15, 15, 8);
+	//out();
+	for (int i = 0; i < length; i++)
+	{
+		for (int j = 0; j < length; j++)
+		{
+			printf("%2d ", maze[i][j]);
+		}
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
