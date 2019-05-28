@@ -1,0 +1,64 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+#define MAX 100
+int maze[MAX][MAX] = { 0 };
+int len = 2;
+
+void init()
+{
+	maze[0][0] = 1;
+	maze[0][1] = 2;
+	maze[1][0] = 2;
+	maze[1][1] = 1;
+}
+void Rec(int n)
+{
+	if (len == n)
+		return;
+	int i, j;
+	for (i = 0; i < len; i++)
+	{
+		for (j = len; j < n; j++)
+		{
+			maze[i][j] = maze[i][j - len] + len;
+		}
+	}
+	for (i = len; i < n; i++)
+	{
+		for (j = len; j < n; j++)
+		{
+			maze[i][j] = maze[i - len][j - len];
+		}
+	}
+	for (i = len; i < n; i++)
+	{
+		for (j = 0; j < len; j++)
+		{
+			maze[i][j] = maze[i][j + len] + len;
+		}
+	}
+	len = len * 2;
+	Rec(n);
+}
+
+int main()
+{
+	int k, n;
+	int i, j;
+	scanf("%d", &k);
+	n = 1 << k;
+	init();
+	Rec(n);
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			printf("%4d ", maze[i][j]);
+		}
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
