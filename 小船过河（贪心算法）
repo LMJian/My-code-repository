@@ -1,0 +1,86 @@
+题目
+只有一艘船，最多能乘2人，船的运行速度为2人中较慢一人的速度，过去后还需一个人把船划回来，问把n个人运到对岸，最少需要多久。
+输入：
+4
+1 2 5 10
+输出：
+17
+
+思考
+1.因为考虑到需要一个人把船划回来，所以我们可以用速度最快的人把其他人带到对岸。
+A B…C D
+AC->
+<-A
+AD->
+<-A
+运输成本：2A+C+D
+2.因为考虑到船往对岸划时，时间为两人中速度较慢的人，所以当两个人都为速度最慢时，即节省了另外一个人的运输成本，但因为需要有人把船划回来，所以我们可以：
+A B…C D
+AB->
+<-A
+CD->
+<-B
+运输成本：A+2B+D
+当A+C<2B时思路一为最优解。反之则思路二为最优解。
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+void sort(int a[], int len)
+{
+	int i, j, t;
+	for (i = 1; i < len; i++)
+	{
+		j = i;
+		while (a[j] < a[j - 1] && j>0)
+		{
+			t = a[j];
+			a[j] = a[j - 1];
+			a[j - 1] = t;
+			j--;
+		}
+	}
+}
+int main()
+{
+	int n;
+	int a[100];
+	int i, sum = 0, s1, s2;
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+	{
+		scanf("%d", &a[i]);
+	}
+	sort(a, n);
+	while (n > 0)
+	{
+		if (n == 1)
+		{
+			sum += a[0];
+			break;
+		}
+		else if (n == 2)
+		{
+			sum += a[1];
+			break;
+		}
+		else if (n == 3)
+		{
+			sum += a[0] + a[1] + a[2];
+			break;
+		}
+		else
+		{
+			s1 = 2 * a[0] + a[n - 1] + a[n - 2];
+			s2 = a[0] + 2 * a[1] + a[n - 1];
+			s1 = s1 < s2 ? s1 : s2;
+			sum += s1;
+			n = n - 2;
+		}
+	}
+	printf("%d\n", sum);
+	system("pause");
+	return 0;
+}
