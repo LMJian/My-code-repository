@@ -1,0 +1,114 @@
+问题描述
+有n个重量和价值分别为wi,vi的物品,从这些物品中挑选出总重量不超过的物品,求所有挑选方案中价值总和的最大值。
+1<=n<=100
+1<=wi. vi<=100
+1<=w<=10000
+输入：
+n=4;
+(w,v)={(2,3),(1,2),(3,4),(2,2)}
+W=5
+输出：
+7(选择第0,1,3号物品)
+因为对每个物品只有选和不选两种情况,所以这个问脑称为01背包。
+
+方法一：
+
+优化
+如图所示，圈起来的重复计算了，在大数据的情况下重复计算的很多，时间复杂度很大，我们可以将计算的值用数组记录下来，在计算之前如果数组对应位置有值则直接输出，大大减少了时间复杂度。
+此为记忆性递归。
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+int w[] = { 2,1,3,2 };
+int v[] = { 3,2,4,2 };
+int n = 4;
+int max = 5;
+
+int dfs(int i, int max)
+{
+	if (i == n)
+		return 0;
+	if (max <= 0)
+		return 0;
+	int v1 = dfs(i + 1, max);
+	int v2 = 0;
+	if (max >= w[i])
+		v2 = v[i] + dfs(i + 1, max - w[i]);
+	return v1 > v2 ? v1 : v2;
+}
+int main()
+{
+	int ans=dfs(0, max);
+	printf("%d\n", ans);
+	system("pause");
+	return 0;
+}
+
+优化的代码
+int maze[100][100] = { 0 };
+
+int dfs(int i, int max)
+{
+	if (i == n)
+		return 0;
+	if (max <= 0)
+		return 0;
+	if (maze[i][max] > 0)
+		return maze[i][max];
+	int v1 = dfs(i + 1, max);
+	int v2 = 0;
+	if (max >= w[i])
+		v2 = v[i] + dfs(i + 1, max - w[i]);
+	maze[i][max]= v1 > v2 ? v1 : v2;
+	return v1 > v2 ? v1 : v2;
+}
+
+方法二：
+dp公式
+v1 = v[i] + maze[i - 1][j - w[i]];
+v2 = maze[i - 1][j];
+maze[i][j]=v1>v2?v1:v2;
+
+如果同一个物品可以多个则dp公式为：
+v1 = v[i] + maze[i][j - w[i]];
+v2 = maze[i - 1][j];
+maze[i][j]=v1>v2?v1:v2;
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+int w[] = { 2,1,3,2 };
+int v[] = { 3,2,4,2 };
+int n = 4;
+int max = 5;
+int maze[100][100] = { 0 };
+
+int main()
+{
+	int i, j;
+	for (i = 0; i < max + 1; i++)
+	{
+		if (i >= w[0])
+			maze[0][i] = v[0];
+	}
+	for (i = 1; i < n; i++)
+	{
+		for (j = 0; j < max + 1; j++)
+		{
+			int v1 = 0;
+			int v2 = 0;
+			if (j >= w[i])
+				v1 = v[i] + maze[i - 1][j - w[i]];
+			v2 = maze[i - 1][j];
+			maze[i][j] = v1 > v2 ? v1 : v2;
+		}
+	}
+	printf("%d\n", maze[n-1][max]);
+	system("pause");
+	return 0;
+}
