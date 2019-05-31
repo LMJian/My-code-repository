@@ -1,0 +1,51 @@
+示例
+输入：{C,B,A}
+输出：{ABC} {A,B} {A,C} {A} {B,C} {B} {C} ∅
+字典序升序输出
+
+思路
+每个字符都存在取或者不取两种状态，可以用二进制解决此问题，要求按照字典序升序输出，可以先把集合按照升序排序，循环从2^n-1到1开始判断每一个二进制位是否为1,如果为1则输出对应位置的字符，因为权值大的二进制位对应的字符下标是小的，所以我们输出时需要特殊处理
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+void sort(char arr[], int len)
+{
+	int i, j, t;
+	for (i = 1; i < len; i++)
+	{
+		j = i;
+		while (arr[j] < arr[j - 1] && j>0)
+		{
+			t = arr[j];
+			arr[j] = arr[j - 1];
+			arr[j - 1] = t;
+			j--;
+		}
+	}
+}
+int main()
+{
+	char arr[] = "CBA";
+	int len = 3;
+	sort(arr, len);
+	int i, j;
+	for (i = (int)pow(2, len)-1; i >=1 ; i--)
+	{
+		int sum = i;
+		for (j = len - 1; j >= 0; j--)
+		{
+			if (sum >= pow(2, j))
+			{
+				printf("%c", arr[len-1-j]);
+				sum -= (int)pow(2, j);
+			}
+		}
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
