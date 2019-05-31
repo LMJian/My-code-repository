@@ -1,0 +1,84 @@
+示例
+输入4 2 3 1 5
+输出3（2 3 5是最长递增子序列）
+
+代码1
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+int dp(int maze[], int len)
+{
+	int arr[100] = { 0 };
+	arr[0] = 1;
+	int i, j;
+	for (i = 1; i < len; i++)
+	{
+		int max = 1;
+		for (j = i - 1; j >= 0; j--)
+		{
+			if (maze[j] < maze[i])
+			{
+				max = max > (arr[j] + 1) ? max : (arr[j] + 1);
+			}
+		}
+		arr[i] = max;
+	}
+	int max = -1;
+	for (i = 0; i < len; i++)
+	{
+		if (max < arr[i])
+			max = arr[i];
+	}
+	return max;
+}
+int main()
+{
+	int maze[] = { 4,2,3,1,5,6,4,8,5,9 };
+	int len = 10;
+	int ans = dp(maze, len);
+	printf("%d\n", ans);
+	system("pause");
+	return 0;
+}
+
+代码2
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+int dp(int maze[], int len)
+{
+	int arr[100] = { 0 };
+	int arrlen = 1;
+	int i, j;
+	arr[0] = maze[0];
+	for (i = 1; i < len; i++)
+	{
+		if (maze[i] > arr[arrlen-1])
+		{
+			arr[arrlen++] = maze[i];
+		}
+		else
+		{
+			for (j = 0; j <arrlen; j++)
+			{
+				if (arr[j] > maze[i])
+				{
+					arr[j] = maze[i];
+					break;
+				}
+			}
+		}
+	}
+	return arrlen;
+}
+int main()
+{
+	int maze[] = { 4,2,3,1,5,6 };
+	int len = 6;
+	int ans = dp(maze, len);
+	printf("%d\n", ans);
+	system("pause");
+	return 0;
+}
