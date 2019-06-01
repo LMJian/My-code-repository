@@ -1,0 +1,75 @@
+问题描述
+给定整数序列a1,a2,.,an,判断是否可以从中选出若干数,使它们的和恰好为k,
+
+1<=n<=20
+-10^8<=ai<=10^8
+-10^8<=k<=10^8
+
+样例
+输入
+n=4
+a={1,2,4,7}
+k=13
+输出:
+Yes(13=2+4+7)
+
+思考
+我做这个题的时候错误在于没有将arr的数组下标作为dfs参数写入函数定义中，导致回溯时错误！！！
+函数递归也都会出错，这里不能使用全局变量。
+如下是我错误的代码
+
+void dfs(int a[], int kk, int cur)
+{
+	if (kk == 0)//找到解
+	{
+		int i = 1;
+		printf("YES(%d=%d", k, arr[0]);
+		while (arr[i] != 0)
+			printf("+%d", arr[i++]);
+		printf(")\n");
+		return;
+	}
+	if (kk < 0 || cur == n)//不满足的条件的出口
+		return;
+	dfs(a, kk, cur + 1);//不选cur这个元素
+
+	arr[arrlen++] = a[cur];//选择cur这个元素，   状态转移
+	dfs(a, kk - a[cur], cur + 1);//深搜
+	arr[arrlen-1] = 0;//回溯
+}
+正确代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+int n = 9;
+int a[] = { 1,2,4,7,3,5,6,8,9 };
+int k = 13;
+int arr[10] = { 0 };
+
+void dfs(int a[], int kk, int cur,int arrlen)
+{
+	if (kk == 0)//找到解
+	{
+		int i = 1;
+		printf("YES(%d=%d", k, arr[0]);
+		while (arr[i] != 0)
+			printf("+%d", arr[i++]);
+		printf(")\n");
+		return;
+	}
+	if (kk < 0 || cur == n)//不满足的条件的出口
+		return;
+	dfs(a, kk, cur + 1,arrlen);//不选cur这个元素
+
+	arr[arrlen] = a[cur];//选择cur这个元素，   状态转移
+	dfs(a, kk - a[cur], cur + 1, arrlen + 1);//深搜
+	arr[arrlen] = 0;//回溯
+}
+int main()
+{
+	int kk = k;
+	dfs(a, kk, 0, 0);
+	system("pause");
+	return 0;
+}
