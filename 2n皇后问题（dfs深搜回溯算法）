@@ -1,0 +1,120 @@
+问题描述
+给定一个n*n的棋盘，棋盘中有一些位置不能放皇后。现在要向棋盘中放入n个黑皇后和n个白皇后，使任意的两个黑皇后都不在同一行、同一列或同一条对角线上，任意的两个白皇后都不在同一行、同一列或同一条对角线上。问总共有多少种放法？n小于等于8。
+输入格式
+　　输入的第一行为一个整数n，表示棋盘的大小。
+　　接下来n行，每行n个0或1的整数，如果一个整数为1，表示对应的位置可以放皇后，如果一个整数为0，表示对应的位置不可以放皇后。
+输出格式
+　　输出一个整数，表示总共有多少种放法。
+样例输入
+4
+1 1 1 1
+1 1 1 1
+1 1 1 1
+1 1 1 1
+样例输出
+2
+样例输入
+4
+1 0 1 1
+1 1 1 1
+1 1 1 1
+1 1 1 1
+样例输出
+0
+
+代码
+#include<stdio.h>
+#include<stdlib.h>
+int ans = 0;
+
+int check(int arr[][8], int n,int x, int y,int maze)
+{
+	int i;
+	int x1,x2,x3,x4;
+	int y1,y2,y3,y4;
+	for (i = 0; i < n; i++)
+	{
+		if (arr[x][i] == maze || arr[i][y] == maze)
+			return 0;
+	}
+	x1 = x + 1;
+	y1 = y + 1;
+	while (x1 >= 0 && x1 < n && y1 >= 0 && y1 < n)
+	{
+		if (arr[x1][y1] == maze)
+			return 0;
+		x1++;
+		y1++;
+	}
+	x2 = x - 1;
+	y2 = y - 1;
+	while (x2 >= 0 && x2 < n && y2 >= 0 && y2 < n)
+	{
+		if (arr[x2][y2] == maze)
+			return 0;
+		x2--;
+		y2--;
+	}
+	x3 = x + 1;
+	y3 = y - 1;
+	while (x3 >= 0 && x3 < n && y3 >= 0 && y3 < n)
+	{
+		if (arr[x3][y3] == maze)
+			return 0;
+		x3++;
+		y3--;
+	}
+	x4 = x - 1;
+	y4 = y + 1;
+	while (x4 >= 0 && x4 < n && y4 >= 0 && y4 < n)
+	{
+		if (arr[x4][y4] == maze)
+			return 0;
+		x4--;
+		y4++;
+	}
+	return 1;
+}
+void dfs(int arr[][8],int n, int x)
+{
+	if (x == n)
+	{
+		ans++;
+		return;
+	}
+	int i,j;
+	for (i = 0; i < n; i++)
+	{
+		if (arr[x][i]==1&&check(arr,n,x,i,2)==1)
+		{
+			arr[x][i] = 2;
+			for (j = 0; j < n; j++)
+			{
+				if (arr[x][j]==1&&check(arr, n, x, j,3) == 1)
+				{
+					arr[x][j] = 3;
+					dfs(arr, n, x + 1);
+					arr[x][j] = 1;
+				}
+			}
+			arr[x][i] = 1;
+		}
+	}
+}
+int main()
+{
+	int arr[8][8] = { 0 };
+	int n;
+	int i,j; 
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			scanf("%d", &arr[i][j]);
+		}
+	}
+	dfs(arr, n, 0);
+	printf("%d\n", ans);
+	return 0;
+}
