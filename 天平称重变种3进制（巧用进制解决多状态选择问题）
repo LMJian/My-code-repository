@@ -1,0 +1,83 @@
+问题描述
+用天平称重时,我们希望用尽可能少的砝码组合称出尽可能多的重量，如果有无限个砝码,但它们的重量分别是1,3,9,27,81,…等3的指数幂，神奇之处在于用它们的组合可以称出任意整数重量(砝码允许放在左右两个盘
+中)。
+本题目要求编程实现:对用户给定的重量,给出砝码组合方案,重量<1000000
+例如:
+用户输入
+5
+程序输出
+9-3-1
+
+思考
+此问题类似01背包问题，不过此题每个数有三种状态，一是不选择此数，二是放天平左边，三是放天平右边。所以我们可以用进制解决此问题，循环找到满足条件的砝码放法即可！
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+int Cubic(int n)
+{
+	int arr[13] = { 0 };
+	int len = 0;
+	while (n != 0)
+	{
+		arr[len++] = n % 3;
+		n = n / 3;
+	}
+	int i;
+	int sum = 0;
+	for (i = 0; i < len; i++)
+	{
+		sum += arr[i] * (int)pow(10, i);
+	}
+	return sum;
+}
+
+int main()
+{
+	int arr[13] = { 0 };
+	int i, j;
+	int n;
+	int sum1 = 0;
+	int sum2 = 0;
+	scanf("%d", &n);
+	for (i = 0; i < 13; i++)
+	{
+		arr[i] = (int)pow(3, i);
+	}
+	int _3max = (int)pow(3, 13) - 1;
+	for (i = 0; i <= _3max; i++)
+	{
+		sum1 = n;
+		sum2 = 0;
+		int num = Cubic(i);
+		j = 0;
+		while (num)
+		{
+			if (num%10 == 1)
+				sum1 += arr[j];
+			else if (num%10 == 2)
+				sum2 += arr[j];
+			num = num / 10;
+			j++;
+		}
+		if (sum1 == sum2)
+		{
+			num= Cubic(i);
+			j = 0;
+			while (num)
+			{
+				if (num % 10 == 1)
+					printf("-%d ", arr[j]);
+				else if (num % 10 == 2)
+					printf("%d ", arr[j]);
+				num = num / 10;
+				j++;
+			}
+			break;
+		}
+	}
+	system("pause");
+	return 0;
+}
