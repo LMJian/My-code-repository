@@ -1,0 +1,90 @@
+一级指针
+指针就是个变量，存放的是指向内容的地址。
+例如：
+
+int main() 
+{    int ch = 97;
+     int *pc = &ch;
+     *pc = 25;
+      return 0;
+}
+
+指针加减1的意义
+指针加减1就是加减类型的字节数，比如int加1地址加4，char加1地址加1。
+
+int main() 
+{    
+	 int a = 97;
+	 char b ='z'; 
+     int *pc = &a;
+     char *p = &b;
+     printf("%p",pc);
+     printf("%p",p);
+     printf("%p",pc+1);//地址加4
+     printf("%p",p+1);//地址加1
+     return 0;
+}
+
+一级指针传参
+
+void print(int *p)
+{
+}
+int main()
+{
+	int arr[]={1,2,3,4};
+	print(arr);
+}
+
+二级指针
+二级指针也是个变量，存放的是一级指针变量的地址。
+
+void test(int **pc)
+{
+}
+int main()
+{
+	int n=10;
+	int *p=&n;//*p就是n
+	int **pp=&p;//*pp就是p,**pp就是n
+	test(pp);
+	test(&p);
+	return 0;
+}
+
+指针和数组
+指针和数组是两个完全不一样的东西。
+但是访问时有一些相似的地方，访问数组某个元素时可以使用数组下标访问，也可以通过指针进行访问。
+数组名只有在两种条件情况下是代表整个数组的。
+1是sizeof(数组名） 2是&数组名
+其他都代表首元素的地址
+是地址就可以通过地址访问。
+
+int main()
+{
+	int arr[10] = { 1,2,3,4,5,6,7 ,8,9,0};
+	printf("%p\n", arr);
+	printf("%p\n", &arr[0]);//与上面结果相同
+	return 0;
+}
+
+int main()
+{
+	int arr[10] = { 1,2,3,4,5,6,7 ,8,9,0};
+	int *p = arr;//首元素地址
+	int sz = sizeof(arr) / sizeof(arr[0]);
+	int i = 0;
+	for (i = 0; i < sz; i++)
+	{
+    // printf("%2d", *(p+i));
+      printf("%2d", arr[i]);//与上面结果相同
+	}
+	return 0;
+}
+
+指针数组
+指针数组是数组，存放指针的数组叫指针数组。
+
+int* arr1[10]; //整形指针的数组
+char *arr2[4]; //一级字符指针的数组
+char **arr3[5];//二级字符指针的数组
