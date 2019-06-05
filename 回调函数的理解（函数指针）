@@ -1,0 +1,54 @@
+描述
+回调函数就是一个通过函数指针调用的函数。如果你把函数的指针（地址）作为参数传递给另一个函数，当这个指针被用来调用其所指向的函数时，我们就说这是回调函数。回调函数不是由该函数的实现方直接调用，而是在特定的事件或条件发生时由另外的一方调用的，用于对该事件或条件进行响应。
+
+代码
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+
+int cmp(char *a, char *b)//根据数组类型写此函数
+{
+	int *pa = (int *)a;
+	int *pb = (int *)b;
+	return *pa > *pb;
+}
+void swap(char *a, char *b,int size)//一字节一字节的交换
+{
+	int i;
+	for (i = 0; i < size; i++)
+	{
+		char t = *a;//一字节一字节的交换
+		*a = *b;
+		*b = t;
+		a++;
+		b++;
+	}
+}
+void  bubble(void *arr, int len, int size, int(*cmp)(void*, void*))
+{
+	char *parr = (char*)arr;
+	int i, j;
+	for (i = 0; i < len - 1; i++)//冒泡len-1次
+	{
+		for (j = 0; j < len - 1 - i; j++)
+		{
+			if (cmp(parr + j * size, parr + (j + 1)*size) == 1)
+			{
+				swap(parr + j * size, parr + (j + 1)*size, size);
+			}
+		}
+	}
+}
+int main()
+{
+	int arr[10] = { 9,8,7,6,5,4,3,2,1,0 };
+	int len = 10;
+	int size = 4;
+	int i;
+	bubble(arr, len, size, cmp);
+	for (i = 0; i < len; i++)
+		printf("%d ", arr[i]);
+	printf("\n");
+	system("pause");
+	return 0;
+}
