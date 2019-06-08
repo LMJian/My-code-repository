@@ -1,0 +1,136 @@
+
+问题描述
+小明家的一面装饰墙原来是 3*10 的小方格。
+现在手头有一批刚好能盖住2个小方格的长方形瓷砖。
+瓷砖只有两种颜色：黄色和橙色。
+
+小明想知道，对于这么简陋的原料，可以贴出多少种不同的花样来。
+小明有个小小的强迫症：忍受不了任何2*2的小格子是同一种颜色。
+（瓷砖不能切割，不能重叠，也不能只铺一部分。另外，只考虑组合图案，请忽略瓷砖的拼缝）
+显然，对于2*3个小格子来说，口算都可以知道：一共10种贴法，如【p1.png所示】
+
+但对于 3*10 的格子呢？肯定是个不小的数目，请你利用计算机的威力算出该数字。
+
+注意：你需要提交的是一个整数，不要填写任何多余的内容（比如：说明性文字）
+
+正确答案
+101466
+思考
+此问题还要考虑去重，我的代码还没有加入去重，之后会了补上
+好啦，我已经更新了代码，加入了去重。
+没有去重之前是105760个样式，我们用一个一维数组把每种样式转化为二进制数存放在数组中，对数组排序，减去相同值的数量就是正确答案了。
+代码
+
+#include<stdio.h>
+#include<math.h>
+
+int arr[3][10] = { 0 };
+long long count = 0;
+int fx[] = { 1,-1,0,0 };
+int fy[] = { 0,0,1,-1 };
+int cun[105760]={0};//存放每种样式的二进制位
+int cunlen=0; 
+
+void sort()
+{
+	int i,j,t;
+	for(i=1;i<105760;i++)
+	{
+		j=i;
+		while(cun[j]<cun[j-1]&&j>0)
+		{
+			t=cun[j];
+			cun[j]=cun[j-1];
+			cun[j-1]=t;
+			j--;
+		}
+	 } 
+}
+int check(int x, int y, int n)
+{
+	if (arr[x][y] != 0)
+		return 0;
+	if (x > 0 && y > 0)
+		if (arr[x - 1][y - 1] == n && arr[x - 1][y] == n && arr[x][y - 1] == n)//左上
+			return 0;
+	if (x > 0 && y <= 8)
+		if (arr[x - 1][y + 1] == n && arr[x - 1][y] == n && arr[x][y + 1] == n)//右上
+			return 0;
+	if (x <= 1 && y > 0)
+		if (arr[x + 1][y - 1] == n && arr[x + 1][y] == n && arr[x][y - 1] == n)//左下
+			return 0;
+	if (x <= 1 && y <= 8)
+		if (arr[x + 1][y + 1] == n && arr[x + 1][y] == n && arr[x][y + 1] == n)//右下
+			return 0;
+	return 1;
+}
+void dfs(int x, int y)
+{
+	int i, j, t, qx, qy;
+	if (x == 3)
+	{
+		count++;
+		t=0;
+		for(i=0;i<3;i++)
+		{
+			for(j=0;j<10;j++)
+			{
+				cun[cunlen]+=arr[i][j]*(int)pow(2,t++);
+			}
+		}
+		cunlen++;
+		return;
+	}
+	if (arr[x][y] != 0)//已经被放置时，搜索下一个位置
+	{
+		dfs(x + (y + 1) / 10, (y + 1) % 10);
+		return;
+	}	
+	if (check(x, y, 1) == 1)//判断是否可以放置1
+	{
+		arr[x][y] = 1;
+		for (i = 0; i < 4; i++)
+		{
+			qx = x + fx[i];
+			qy = y + fy[i];
+			if (qx >= 0 && qx < 3 && qy >= 0 && qy < 10)
+				if (check(qx, qy, 1) == 1)
+				{
+					arr[qx][qy] = 1;
+					dfs(x + (y + 1) / 10, (y + 1) % 10);
+					arr[qx][qy] = 0;
+				}
+		}
+		arr[x][y] = 0;
+	}
+	if (check(x, y, 2) == 1)//判断是否可以放置2
+	{
+		arr[x][y] = 2;
+		for (i = 0; i < 4; i++)
+		{
+			qx = x + fx[i];
+			qy = y + fy[i];
+			if (qx >= 0 && qx < 3 && qy >= 0 && qy < 10)
+				if (check(qx, qy, 2) == 1)
+				{
+					arr[qx][qy] = 2;
+					dfs(x + (y + 1) / 10, (y + 1) % 10);
+					arr[qx][qy] = 0;
+				}
+		}
+		arr[x][y] = 0;
+	}
+}
+int main()
+{
+	int i;
+	dfs(0, 0);
+	sort();
+	for(i=1;i<105760;i++)
+	{
+		if(cun[i-1]==cun[i])
+		count--;
+	}
+	printf("%I64d\n", count);
+	return 0;
+}
