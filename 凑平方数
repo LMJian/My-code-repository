@@ -1,0 +1,89 @@
+
+把0~9这10个数字，分成多个组，每个组恰好是一个平方数，这是能够办到的。
+比如：0, 36, 5948721
+
+再比如：
+1098524736
+1, 25, 6390784
+0, 4, 289, 15376
+等等…
+
+注意，0可以作为独立的数字，但不能作为多位数字的开始。
+分组时，必须用完所有的数字，不能重复，不能遗漏。
+
+如果不计较小组内数据的先后顺序，请问有多少种不同的分组方案？
+
+注意：需要提交的是一个整数，不要填写多余内容。
+思考
+把满足条件的平方数用数组存储起来，难度在于搜寻算法，以及将两个整型数拼接在一起需要注意，前面和后面的数为零时需要特殊处理。
+答案：300
+
+代码
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+long long num[700] = { 0 };
+int numlen = 0;
+int sum = 0;
+
+int Judge(long long n)//判断是不是满足条件的数，如果是返回数字的位数，如果不是返回0，注意这里数字0要返回1
+{
+	if (n == 0)
+		return 1;
+	int a[10] = { 0 };
+	int len = 0;
+	while (n)
+	{
+		a[n % 10]++;
+		if (a[n % 10] > 1)
+			return 0;
+		n = n / 10;
+		len++;
+	}
+	return len;
+}
+long long splice(long long n, long long number)//拼接函数，将数字n和数字number拼接在一起
+{
+	if (number == 0)
+		return n * 10;
+	long long t = number;
+	int len = 0;
+	while (t)
+	{
+		len++;
+		t = t / 10;
+	}
+	return (long long)(n*pow(10, len) + number);
+}
+void search(int  start, long long number)//搜寻函数，统计
+{
+	int len = Judge(number);
+	if (len == 0)
+		return;
+	if (len == 10)
+	{
+		sum++;
+		return;
+	}
+	for (int i = start; i >=0; i--)
+		search(i - 1, splice(number, num[i]));
+}
+
+int main()
+{
+	long long i;
+	for (i = 0; i*i <= 9876543210; i++)
+	{
+		if (Judge(i*i) != 0)
+		{
+			num[numlen++] = i * i;
+		}
+	}
+	search(numlen-1, 0);//搜寻算法,从后搜索是为了避免，0没办法做高位和其他数字拼接
+	printf("%d\n", sum);
+	system("pause");
+	return 0;
+}
