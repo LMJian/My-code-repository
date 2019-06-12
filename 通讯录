@@ -1,0 +1,327 @@
+实现一个通讯录
+通讯录可以用来存储1000个人的信息，每个人的信息包括：
+姓名、性别、年龄、电话、住址
+
+提供方法：
+
+添加联系人信息
+删除指定联系人信息
+查找指定联系人信息
+修改指定联系人信息
+显示所有联系人信息
+清空所有联系人
+以名字排序所有联系人
+保存联系人到文件
+加载联系人
+main.c
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include"contact.h"
+
+void Menu()
+{
+	printf("####################################\n");
+	printf("###   1 Add   2 Del   3 Search   ###\n");
+	printf("###   4 Mod   5 Show  6 Clear    ###\n");
+	printf("###   7 Sort  8 Save  9 Exit     ###\n");
+	printf("####################################\n");
+	printf("Please Select:");
+}
+
+int main()
+{
+	int key = 1;
+	int num;
+	contact_p ct;
+	Load(&ct);
+	while (key)
+	{
+		Menu();
+		scanf("%d", &num);
+		switch (num)
+		{
+		case 1:
+			Add(&ct);
+			break;
+		case 2:
+			Del(ct);
+			break;
+		case 3:
+			Search(ct);
+			break;
+		case 4:
+			Mod(ct);
+			break;
+		case 5:
+			Show(ct);
+			break;
+		case 6:
+			Clear(ct);
+			break;
+		case 7:
+			Sort(ct);
+			break;
+		case 8:
+			Save(ct);
+			break;
+		case 9:
+			Save(ct);
+			key = 0;
+			break;
+		default:
+			printf("Incorrect input\n");
+			break;
+		}
+	}
+	system("pause");
+	return 0;
+}
+
+contact.h
+
+#ifndef _CONTACT_H_
+#define _CONTACT_H_
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<windows.h>
+#include<string.h>
+#include<errno.h>
+#define NAME_SIZE 20
+#define TEL_SIZE 20
+#define ADDR_SIZE 30
+#define LIST_SIZE 2
+#define INCSIZE 2
+#define CT_FILE "contact.bin"
+
+typedef struct person {
+	char name[NAME_SIZE];
+	char sex;
+	int age;
+	char telphone[TEL_SIZE];
+	char address[ADDR_SIZE];
+}person_t,*person_p,**person_pp;
+
+typedef struct contact {
+	int cap;
+	int size;
+	person_t list[0];
+}contact_t,*contact_p,**contact_pp;
+
+void Add(contact_pp cpp);
+
+void Del(contact_p ct);
+
+void Search(contact_p ct);
+
+void Mod(contact_p ct);
+
+void Show(contact_p ct);
+
+void Clear(contact_p ct);
+
+void Sort(contact_p ct);
+
+void Save(contact_p ct);
+
+void InitContact(contact_pp ctpp);
+
+int Load(contact_pp ctpp);
+
+
+
+#endif
+
+contact.c
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include"contact.h"
+
+int Inc(contact_pp cpp)
+{
+	int size = sizeof(contact_t) + ((*cpp)->cap + INCSIZE) * sizeof(person_t);
+	contact_p tp = realloc(*cpp, size);
+	if (NULL == tp)
+	{
+		printf("Inc error!\n");
+		return 0;
+	}
+	printf("debug:Inc Contact Sucess!\n");
+	tp->cap = (*cpp)->cap + INCSIZE;
+	*cpp = tp;
+	return 1;
+		
+}
+int IsFull(contact_p cp)
+{
+	if (cp->size < cp->cap)
+		return 0;
+	return 1;
+}
+void Add(contact_pp cpp)
+{
+	if (!IsFull(*cpp) || Inc(cpp) == 1)
+	{
+		printf("Please Enter name,sex,age,tel,addr\n");
+		scanf("%s", (*cpp)->list[(*cpp)->size].name);
+		getchar();
+		scanf("%c", &((*cpp)->list[(*cpp)->size].sex));
+		scanf("%d", &((*cpp)->list[(*cpp)->size].age));
+		scanf("%s", (*cpp)->list[(*cpp)->size].telphone);
+		scanf("%s", (*cpp)->list[(*cpp)->size].address);
+		((*cpp)->size)++;
+	}
+	else
+	{
+		printf("realloc error\n");
+		return;
+	}
+}
+
+void Del(contact_p ctp)
+{
+	int i;
+	char name[20] = "";
+	printf("Please Enter Del name\n");
+	scanf("%s", name);
+	for (i = 0; i < ctp->size; i++)
+	{
+		if (strcmp(name, (ctp->list[i]).name) == 0)
+		{
+			memcpy(&(ctp->list[i]), &(ctp->list[(ctp->size) - 1]), sizeof(person_t));
+			(ctp->size)--;
+			return;
+		}
+	}
+}
+
+void Search(contact_p ctp)
+{
+	int i;
+	char name[20] = "";
+	printf("Please Enter Search name\n");
+	scanf("%s", name);
+	for (i = 0; i < ctp->size; i++)
+	{
+		if (strcmp(name, (ctp->list[i]).name) == 0)
+		{
+			printf("%-10s%-5c%-10d%-10s%-10s\n", (ctp->list[i]).name, (ctp->list[i]).sex, \
+				(ctp->list[i]).age, (ctp->list[i]).telphone, (ctp->list[i]).address);
+			return;
+		}
+	}
+}
+
+void Mod(contact_p ctp)
+{
+	int i;
+	char name[20] = "";
+	printf("Please Enter Mod name\n");
+	scanf("%s", name);
+	for (i = 0; i < ctp->size; i++)
+	{
+		if (strcmp(name, (ctp->list[i]).name) == 0)
+		{
+			printf("Please Enter New name, sex, age, tel, addr\n");
+			scanf("%s", (ctp->list[i]).name);
+			getchar();
+			scanf("%c", &((ctp->list[i]).sex));
+			scanf("%d", &((ctp->list[i]).age));
+			scanf("%s", (ctp->list[i]).telphone);
+			scanf("%s", (ctp->list[i]).address);
+			return;
+		}
+	}
+
+}
+
+void Show(contact_p ct)
+{
+	int i;
+	for (i = 0; i < (ct->size); i++)
+	{
+		printf("%-10s%-5c%-10d%-10s%-10s\n", (ct->list[i]).name, (ct->list[i]).sex,\
+			(ct->list[i]).age,(ct->list[i]).telphone,(ct->list[i]).address);
+	}
+	return;
+}
+
+void Clear(contact_p ct)
+{
+	ct->size = 0; 
+	return;
+}
+
+static int cmp(const void*x, const void *y)
+{
+	person_p _x = (person_p)x;
+	person_p _y = (person_p)y;
+	return strcmp(_x->name,_y->name);
+}
+void Sort(contact_p ctp)
+{
+	person_p p= ctp->list;
+	qsort(p, ctp->size, sizeof(person_t), cmp);
+	return;
+}
+
+void Save(contact_p ct)
+{
+	FILE *fp = fopen(CT_FILE, "wb");
+	if (NULL == fp)
+	{
+		printf("fopen error!\n");
+		return;
+	}
+	int size = sizeof(contact_t) + ct->size * sizeof(person_t);
+	fwrite(ct, size, 1, fp);
+	fclose(fp);
+}
+void InitContact(contact_pp ctpp)
+{
+	*ctpp = (contact_p)malloc(sizeof(contact_t) + sizeof(person_t)*LIST_SIZE);
+	if (NULL == *ctpp)
+	{
+		printf("%s:%d\n", strerror(errno), errno);
+		exit(1);
+	}
+	(*ctpp)->cap = LIST_SIZE;
+	(*ctpp)->size = 0;
+	printf("debug:Init Contact Sucess!\n");
+}
+
+int InitContactFile(contact_pp ctpp,FILE * fp)
+{
+	contact_p ctp = (contact_p)malloc(sizeof(contact_t));
+	if (ctp) {
+		fread(ctp, sizeof(contact_t), 1, fp);
+		int _cap = ctp->cap;
+		int size = sizeof(contact_t) + ctp->cap * sizeof(person_t);
+		contact_p p = (contact_p)realloc(ctp, size);
+		if (p)
+		{
+			ctp = p;
+			fread(ctp->list, (ctp->cap) * sizeof(person_t), 1, fp);
+			*ctpp = ctp;
+			return 1;
+		}
+		else
+			return 0;
+	}
+	else
+		return 0;
+}
+
+int Load(contact_pp ctpp)
+{
+	FILE *fp = fopen(CT_FILE, "rb");
+	if (NULL == fp)
+	{
+		printf("Init Contact Default!\n");
+		InitContact(ctpp);
+		return 1;
+	}
+	int ret = InitContactFile(ctpp, fp);
+	fclose(fp);
+	return ret;
+}
