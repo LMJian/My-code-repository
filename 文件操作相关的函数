@@ -1,0 +1,190 @@
+文件的打开和关闭
+文件在读写之前应该先打开文件，在使用结束之后应该关闭文件。
+在编写程序的时候，在打开文件的同时，都会返回一个FILE*的指针变量指向该文件，也相当于建立了指针和文件 的关系。
+ANSIC 规定使用fopen函数来打开文件，fclose来关闭文件。
+
+FILE * fopen ( const char * filename, const char * mode ); 
+int fclose ( FILE * stream );
+
+打开方式如下：
+
+文件使用方式 含义 如果指定文件不存在
+“r”（只读） 为了输入数据，打开一个已经存在的文本文件 出错
+“w”（只写） 为了输出数据，打开一个文本文件 建立一个新的文件
+“a”（追加） 向文本文件尾添加数据 出错
+“rb”（只读） 为了输入数据，打开一个二进制文件 出错
+“wb”（只写） 为了输出数据，打开一个二进制文件 建立一个新的文件
+“ab”（追加） 向一个二进制文件尾添加数据 出错
+“r+”（读写） 为了读和写，打开一个文本文件 出错
+“w+”（读写） 为了读和写，建议一个新的文件 建立一个新的文件
+“a+”（读写） 打开一个文件，在文件尾进行读写 建立一个新的文件
+“rb+”（读写） 为了读和写打开一个二进制文件 出错
+“wb+”（读写） 为了读和写，新建一个新的二进制文件 建立一个新的文件
+“ab+”（读写） 打开一个二进制文件，在文件尾进行读和写 建立一个新的文件
+
+实例代码
+
+/* fopen fclose example */ 
+#include <stdio.h> 
+int main () 
+{  
+	FILE * pFile;
+    pFile = fopen ("myfile.txt","w");
+    if (pFile!=NULL)  
+    {    
+    	fputs ("fopen example",pFile);
+        fclose (pFile);  
+    }  
+        return 0; 
+}
+
+文件的顺序读写
+
+功能 函数名 适用于
+字符输入函数 fgetc 所有输入流
+字符输出函数 fputc 所有输出流
+文本行输入函数 fgets 所有输入流
+文本行输出函数 fputs 所有输出流
+格式化输入函数 fscanf 所有输入流
+格式化输出函数 fprintf 所有输出流
+二进制输入 fread 文件
+二进制输出 fwrite 文件
+
+对比一组函数：
+
+scanf/fscanf/sscanf 
+printf/fprintf/sprintf 
+
+文件的随机读写
+fseek
+根据文件指针的位置和偏移量来定位文件指针。
+int fseek ( FILE * stream, long int offset, int origin )；
+例子：
+
+/* fseek example */ 
+#include <stdio.h>
+int main () 
+{  
+	FILE * pFile;  
+	pFile = fopen ( "example.txt" , "wb" );  
+	fputs ( "This is an apple." , pFile );  
+	fseek ( pFile , 9 , SEEK_SET );  
+	fputs ( " sam" , pFile );  
+	fclose ( pFile );  
+	return 0;
+}
+
+ftell
+
+返回文件指针相对于起始位置的偏移量
+long int ftell ( FILE * stream );
+
+例子：
+
+/* ftell example : getting size of a file */ 
+#include <stdio.h>
+int main () 
+{  
+	FILE * pFile;  
+	long size;
+  	pFile = fopen ("myfile.txt","rb");  
+  	if (pFile==NULL) 
+  	perror ("Error opening file");  
+  	else 
+  	 {    
+  	 	fseek (pFile, 0, SEEK_END);   // non-portable    
+  	 	size=ftell (pFile);    
+  	 	fclose (pFile);    
+  	 	printf ("Size of myfile.txt: %ld bytes.\n",size);  
+  	 }  
+  	 return 0; 
+}
+
+rewind
+
+让文件指针的位置回到文件的起始位置
+void rewind ( FILE * stream );
+
+例子：
+
+/* rewind example */ 
+#include <stdio.h>
+int main () 
+{  
+	int n;  
+	FILE * pFile;
+    char buffer [27];
+    pFile = fopen ("myfile.txt","w+");  
+    for ( n='A' ; n<='Z' ; n++)    
+    fputc ( n, pFile);  
+    rewind (pFile);  
+    fread (buffer,1,26,pFile);  
+    fclose (pFile);  
+    buffer[26]='\0';  
+    puts (buffer);  
+    return 0; 
+}
+
+文件结束判定
+被错误使用的 feof
+牢记：在文件读取过程中，不能用feof函数的返回值直接用来判断文件的是否结束。
+而是应用于当文件读取结束的时候，判断是读取失败结束，还是遇到文件尾结束。
+
+文本文件读取是否结束，判断返回值是否为EOF （fgetc），或者NULL（fgets）
+例如：
+1. fgetc判断是否为EOF.
+2. fgets判断返回值是否为NULL.
+二进制文件的读取结束判断，判断返回值是否小于实际要读的个数。
+例如：
+1.fread判断返回值是否小于实际要读的个数。
+正确的使用：
+文本文件的例子：
+#include <stdio.h> 
+#include <stdlib.h>
+int main(void) 
+{    
+		int c; // 注意：int，非char，要求处理EOF    
+		FILE* fp = fopen("test.txt", "r");    
+		if(!fp) 
+		{        
+			perror("File opening failed");        
+			return EXIT_FAILURE;    
+		}    //fgetc 当读取失败的时候或者遇到文件结束的时候，都会返回EOF    
+		while ((c = fgetc(fp)) != EOF) // 标准C I/O读取文件循环   
+		 {        
+		 	putchar(c);   
+		  }    //判断是什么原因结束的    
+		  if (ferror(fp))        
+		  puts("I/O error when reading");    
+		  else if (feof(fp))        
+		  puts("End of file reached successfully");
+    	 fclose(fp); 
+}
+
+二进制文件的例子：
+
+#include <stdio.h>
+enum { SIZE = 5 }; 
+int main(void)
+ {    
+ 	double a[SIZE] = {1.0,2.0,3.0,4.0,5.0};    
+ 	double b = 0.0;    
+ 	size_t ret_code = 0;    
+ 	FILE *fp = fopen("test.bin", "wb"); // 必须用二进制模式    
+ 	fwrite(a, sizeof(*a), SIZE, fp); // 写 double 的数组    
+ 	fclose(fp);
+ 
+    fp = fopen("test.bin","rb");    // 读 double 的数组    
+    while((ret_code = fread(&b, sizeof(double), 1, fp))>=1)    
+    {        
+    	printf("%lf\n",b);   
+     }    
+     if (feof(fp))        
+     printf("Error reading test.bin: unexpected end of file\n");    
+     else if (ferror(fp)) 
+     {        
+     	perror("Error reading test.bin");    
+     }   
+      fclose(fp);    
+      fp = NULL; 
+} 
