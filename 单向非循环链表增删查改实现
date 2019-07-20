@@ -113,14 +113,16 @@ void SListEraseAfter(SListNode* pos)//删除pos+1位置结点
 	pos->_next = pos->_next->_next;
 	free(pt);
 }
+
 void SListRemove(SList* plist, SLTDataType x)//删除值为x的结点
 {
-	if (plist->_head->_data == x)
+	while (plist->_head != NULL&&plist->_head->_data == x)
 	{
-		SListNode* ph = plist->_head;
-		plist->_head = ph->_next;
-		free(ph);
+		SListPopFront(plist);
 	}
+	if (plist->_head == NULL)
+		return;
+
 	SListNode* ph = plist->_head;
 	SListNode* pt = ph->_next;
 	while (pt != NULL)
@@ -136,6 +138,7 @@ void SListRemove(SList* plist, SLTDataType x)//删除值为x的结点
 		ph = ph->_next;
 	}
 }
+
 void SListPrint(SList* plist)
 {
 	SListNode* pt = plist->_head;
@@ -145,6 +148,93 @@ void SListPrint(SList* plist)
 		pt = pt->_next;
 	}
 	printf("\n");
+}
+void SListReverse(SList* plist)//链表置逆
+{
+	SListNode* head = plist->_head;
+	SListNode* ph = plist->_head;
+	SListNode* pt = ph->_next;
+	while (pt != NULL)
+	{
+		ph->_next = pt->_next;
+		pt->_next = head;
+		head = pt;
+		pt = ph->_next;
+	}
+	plist->_head = head;
+}
+SListNode* FindCommonNode(SListNode* p1, SListNode* p2)//找第一个公共结点
+{
+	int len1 = 0, len2 = 0;
+	SListNode *pt1 = p1, *pt2 = p2;
+	int i;
+	while (pt1 != NULL)
+	{
+		len1++;
+		pt1 = pt1->_next;
+	}
+	while (pt2 != NULL)
+	{
+		len2++;
+		pt2 = pt2->_next;
+	}
+	if (len1 > len2)
+	{
+		for (i = 0; i < len1 - len2; i++)
+			p1 = p1->_next;
+	}
+	else
+	{
+		for (i = 0; i < len2 - len1; i++)
+			p2 = p2->_next;
+	}
+	do
+	{
+		if (p1 == p2)
+			return p1;
+		p1 = p1->_next;
+		p2 = p2->_next;
+	} while (p1 != NULL);
+	return NULL;
+}
+int judgeLoop(SList* list)//判断是否成环
+{
+	SListNode *p1 = list->_head;
+	SListNode *p2 = list->_head->_next;
+	while (p1 != NULL&&p2 != NULL)
+	{
+		if (p1 == p2)
+			return 1;
+		p1 = p1->_next;
+		if (p2->_next == NULL)
+			return 0;
+		p2 = p2->_next->_next;
+	}
+	return 0;
+}
+
+SListNode *FindEntrance(SList *phead)//找入环第一个结点
+{
+	SListNode *slow = phead->_head;
+	SListNode *fast = phead->_head;
+	while (slow != NULL&&fast != NULL)
+	{
+		slow = slow->_next;
+		if (fast->_next == NULL)
+			return NULL;
+		fast = fast->_next->_next;
+		if (slow == fast)
+		{
+			fast = phead->_head;
+			while (slow != fast)
+			{
+				slow = slow->_next;
+				fast = fast->_next;
+			}
+			return slow;
+		}
+	}
+	return NULL;
 }
 
 main.c
