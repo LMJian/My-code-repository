@@ -36,6 +36,8 @@ void ListPrint(List* plist);
 
 #endif /*_LIST_H_*/
 
+List.c
+
 #include"List.h"
 
 void ListInit(List* plist)
