@@ -36,8 +36,6 @@ void ListPrint(List* plist);
 
 #endif /*_LIST_H_*/
 
-List.c
-
 #include"List.h"
 
 void ListInit(List* plist)
@@ -172,6 +170,50 @@ void ListPrint(List* plist)
 		pt = pt->_next;
 	}
 	printf("\n");
+}
+void ListMerge(List* plist1, List* plist2)//将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成 的.
+{
+	ListNode* p1 = plist1->_head->_next;
+	ListNode* p2 = plist2->_head->_next;
+	ListNode* pt2 = p2->_next;
+	while (p2 != plist2->_head&&p1 != plist1->_head)
+	{
+		if (p1->_data > p2->_data)
+		{
+			p1->_prev->_next = p2;
+			p2->_prev = p1->_prev;
+			p2->_next = p1;
+			p1->_prev = p2;
+			p2 = pt2;
+			pt2 = p2->_next;
+		}
+		else
+		{
+			p1 = p1->_next;
+		}
+	}
+	if (p2 != plist2->_head)
+	{
+		plist1->_head->_prev->_next = p2;
+		p2->_prev = plist1->_head->_prev;
+		plist2->_head->_prev->_next = plist1->_head;
+		plist1->_head->_prev = plist2->_head->_prev;
+	}
+}
+List* ListPopDitto(List* plist)// 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头 指针
+{
+	ListNode* pt = plist->_head->_next;
+	while (pt->_next != plist->_head)
+	{
+		if (pt->_data == pt->_next->_data)
+		{
+			pt->_next = pt->_next->_next;
+			pt->_next->_prev = pt;
+			continue;
+		}
+		pt = pt->_next;
+	}
+	return plist;
 }
 
 main.c
