@@ -1,0 +1,250 @@
+contact.h
+
+#ifndef _CONTACT_H_
+#define _CONTACT_H_
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+#define NAME_SIZE 20
+#define TEL_SIZE 20
+#define ADDR_SIZE 30
+
+typedef struct person {
+	char name[NAME_SIZE];
+	char sex;
+	int age;
+	char telphone[TEL_SIZE];
+	char address[ADDR_SIZE];
+	struct person *_next;
+	struct person *_prev;
+}person;
+
+typedef struct contact {
+	person *head;
+}contact;
+
+void contactInit(contact *list);
+void Add(contact *list);
+void Del(contact *list);
+void Search(contact *list);
+void Mod(contact *list);
+void Show(contact *list);
+void Clear(contact *list);
+void Sort(contact *list);
+int FindSame(char *str1, char *str2);
+#endif
+
+contact.c
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include"contact.h"
+
+void contactInit(contact *list)//初始化头结点
+{
+	list->head = (person*)malloc(sizeof(person));
+	list->head->_next = list->head;
+	list->head->_prev = list->head;
+}
+
+void Add(contact *list)//增加
+{
+	person *pt = (person*)malloc(sizeof(person));
+	printf("Please Enter name,sex,age,tel,addr\n");
+	scanf("%s", pt->name);
+	getchar();
+	scanf("%c", &(pt->sex));
+	scanf("%d", &(pt->age));
+	scanf("%s", pt->telphone);
+	scanf("%s", pt->address);
+	list->head->_prev->_next = pt;
+	pt->_prev = list->head->_prev;
+	pt->_next = list->head;
+	list->head->_prev = pt;
+}
+
+void Del(contact *list)//删除
+{
+	person* pt = list->head->_next;
+	char name[20] = "";
+	printf("Please Enter Del name\n");
+	scanf("%s", name);
+	while (pt != list->head)
+	{
+		if (strcmp(pt->name, name) == 0)
+		{
+			pt->_prev->_next = pt->_next;
+			pt->_next->_prev = pt->_prev;
+			free(pt);
+			return;
+		}
+		pt = pt->_next;
+	}
+	printf("删除失败，没有此人\n");
+}
+int FindSame(char *str1, char *str2)
+{
+	char *strt;
+	while (*str1 != '\0')
+	{
+		while (*str1 != '\0'&&*str1 != *str2)
+			str1++;
+		strt = str2;
+		while (*str1 != '\0'&&*strt != '\0')
+		{
+			if (*strt != *str1)
+				break;
+			strt++;
+			str1++;
+		}
+		if (*strt == '\0')
+			return 1;
+	}
+	return 0;
+}
+void Search(contact *list)//模糊搜索
+{
+	char name[20] = "";
+	person *pt = list->head->_next;
+	printf("Please Enter Search Keyword Name\n");
+	scanf("%s", name);
+	while (pt != list->head)
+	{
+		if (FindSame(pt->name, name) == 1)
+		{
+			printf("%-10s%-5c%-10d%-10s%-10s\n", pt->name, pt->sex, pt->age, pt->telphone, pt->address);
+		}
+		pt = pt->_next;
+	}
+}
+
+void Mod(contact *list)//修改
+{
+	char name[20] = "";
+	person *pt = list->head->_next;
+	printf("Please Enter Mod name\n");
+	scanf("%s", name);
+	while (pt != list->head)
+	{
+		if (strcmp(pt->name, name) == 0)
+		{
+			printf("Please Enter New name, sex, age, tel, addr\n");
+			scanf("%s", pt->name);
+			getchar();
+			scanf("%c", &(pt->sex));
+			scanf("%d", &(pt->age));
+			scanf("%s", pt->telphone);
+			scanf("%s", pt->address);
+			return;
+		}
+		pt = pt->_next;
+	}
+	printf("修改失败，没有此人\n");
+}
+
+void Show(contact *list)//输出
+{
+	person *pt = list->head->_next;
+	while (pt != list->head)
+	{
+		printf("%-10s%-5c%-10d%-10s%-10s\n", pt->name, pt->sex, pt->age, pt->telphone, pt->address);
+		pt = pt->_next;
+	}
+}
+
+void Clear(contact *list)//清空
+{
+	person *pt = list->head->_next;
+	person *ptt;
+	while (pt != list->head)
+	{
+		ptt = pt->_next;
+		free(pt);
+		pt = ptt;
+	}
+	list->head->_next = list->head;
+	list->head->_prev = list->head;
+}
+
+void Sort(contact *list)//排序
+{
+	person *p1 = list->head->_next->_next;//第二个结点
+	person *p2, *p3;
+	while (p1 != list->head)
+	{
+		p2 = p1;
+		while (p2 != list->head->_next&&strcmp(p2->_prev->name, p2->name) == 1)
+		{
+			p3 = p2->_prev;//p3在p2前面，两个结点需要交换位置
+			p3->_next = p2->_next;
+			p2->_next->_prev = p3;
+			p3->_prev->_next = p2;
+			p2->_prev = p3->_prev;
+			p2->_next = p3;
+			p3->_prev = p2;
+		}
+		p1 = p1->_next;
+	}
+	Show(list);
+}
+
+main.c
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#include"contact.h"
+
+void Menu()
+{
+	printf("####################################\n");
+	printf("###   1 Add   2 Del   3 Search   ###\n");
+	printf("###   4 Mod   5 Show  6 Clear    ###\n");
+	printf("###   7 Sort  8 Exit             ###\n");
+	printf("####################################\n");
+	printf("Please Select:");
+}
+
+int main()
+{
+	int key = 1;
+	int num;
+	contact test;
+	contactInit(&test);//初始化头结点
+	while (key)
+	{
+		Menu();
+		scanf("%d", &num);
+		switch (num)
+		{
+		case 1:
+			Add(&test);
+			break;
+		case 2:
+			Del(&test);
+			break;
+		case 3:
+			Search(&test);
+			break;
+		case 4:
+			Mod(&test);
+			break;
+		case 5:
+			Show(&test);
+			break;
+		case 6:
+			Clear(&test);
+			break;
+		case 7:
+			Sort(&test);
+			break;
+		case 8:
+			key = 0;
+			break;
+		default:
+			printf("Incorrect input\n");
+			break;
+		}
+	}
+	system("pause");
+	return 0;
+}
