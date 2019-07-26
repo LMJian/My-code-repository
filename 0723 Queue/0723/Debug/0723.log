@@ -1,0 +1,17 @@
+﻿生成启动时间为 2019/7/26 22:45:27。
+     1>项目“C:\Users\LMJian\Documents\Visual Studio 2013\Projects\0723 Queue\0723\0723.vcxproj”在节点 2 上(Rebuild 个目标)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (0723.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Visual Leak Detector\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt main.c Queue.c
+         Queue.c
+         main.c
+         正在生成代码...
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\LMJian\Documents\Visual Studio 2013\Projects\0723 Queue\Debug\0723 Queue.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\LMJian\Documents\Visual Studio 2013\Projects\0723 Queue\Debug\0723 Queue.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\LMJian\Documents\Visual Studio 2013\Projects\0723 Queue\Debug\0723 Queue.lib" /MACHINE:X86 Debug\main.obj
+         Debug\Queue.obj
+         0723.vcxproj -> C:\Users\LMJian\Documents\Visual Studio 2013\Projects\0723 Queue\Debug\0723 Queue.exe
+     1>已完成生成项目“C:\Users\LMJian\Documents\Visual Studio 2013\Projects\0723 Queue\0723\0723.vcxproj”(Rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:00.52
