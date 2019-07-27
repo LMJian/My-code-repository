@@ -136,17 +136,27 @@ void BinaryTreeLevelOrder(BTNode* root)
 // 判断二叉树是否是完全二叉树 
 int BinaryTreeComplete(BTNode* root)
 {
-	static int i = 1;
-	if ((root->_left == NULL&&root->_right != NULL) || (root->_left != NULL&&root->_right == NULL))
+	Queue *pq = (Queue*)malloc(sizeof(Queue));
+	QueueInit(pq, root);
+	int key = 0;
+	while (pq->_front != NULL)
 	{
-		i = 0;
-		return 0;
+		if (pq->_front->_Qdata->_left == NULL&&pq->_front->_Qdata->_right != NULL)
+			return 0;
+		if (key && (pq->_front->_Qdata->_left != NULL || pq->_front->_Qdata->_right != NULL))
+			return 0;
+		if (pq->_front->_Qdata->_right == NULL)
+			key = 1;
+
+		if (pq->_front->_Qdata->_left != NULL)
+			QueuePush(pq, pq->_front->_Qdata->_left);
+		if (pq->_front->_Qdata->_right != NULL)
+			QueuePush(pq, pq->_front->_Qdata->_right);
+		QueueNode *pt = pq->_front;
+		pq->_front = pq->_front->_next;
+		free(pt);
 	}
-	if (root->_left != NULL)
-		BinaryTreeComplete(root->_left);
-	if (root->_right != NULL)
-		BinaryTreeComplete(root->_right);
-	return i;
+	return 1;
 }
 void BinaryTreePrevOrderNonR(BTNode* root)
 {

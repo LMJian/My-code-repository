@@ -2,11 +2,10 @@
 
 int main()
 {
-	BTNode *test = BinaryTreeCreate("ABDF####CE#GH##I#J###");
+	BTNode *test = BinaryTreeCreate("ABDH##I##EJ###CF##G##");
 	printf("%d\n", BinaryTreeSize(test));
 	printf("%d\n", BinaryTreeLeafSize(test));
-	//printf("%d\n", BinaryTreeLeve1KSize(test,5));
-	printf("%p\n", BinaryTreeFind(test, 'D'));
+	printf("%p\n", BinaryTreeFind(test, 'G'));
 	BinaryTreePrevOrder(test);
 	printf("\n");
 	BinaryTreePrevOrderNonR(test);
