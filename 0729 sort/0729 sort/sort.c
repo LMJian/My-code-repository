@@ -94,3 +94,39 @@ void QSort(int *arr, int n)
 {
 	dealQSort(arr, 0, n - 1);
 }
+
+void directInsertionSort(int *arr, int n)
+{
+	int i, j, t;
+	for (i = 1; i < n; i++)
+	{
+		j = i;
+		while (j>0 && arr[j] < arr[j - 1])
+		{
+			t = arr[j];
+			arr[j] = arr[j - 1];
+			arr[j - 1] = t;
+			j--;
+		}
+	}
+}
+void sellSort(int *arr, int n)
+{
+	int gap = n / 2;
+	while (gap >= 1)
+	{
+		int i, j, t;
+		for (i = gap; i < n; i++)
+		{
+			j = i;
+			while (j>0 && arr[j] < arr[j - gap])
+			{
+				t = arr[j];
+				arr[j] = arr[j - gap];
+				arr[j - gap] = t;
+				j = j - gap;
+			}
+		}
+		gap = gap / 2;
+	}
+}
