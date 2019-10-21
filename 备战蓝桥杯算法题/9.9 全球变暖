@@ -1,0 +1,119 @@
+
+你有一张某海域NxN像素的照片，".“表示海洋、”#"表示陆地，如下所示：
+
+…
+.##…
+.##…
+…##.
+…####.
+…###.
+…
+
+其中"上下左右"四个方向上连在一起的一片陆地组成一座岛屿。例如上图就有2座岛屿。
+
+由于全球变暖导致了海面上升，科学家预测未来几十年，岛屿边缘一个像素的范围会被海水淹没。具体来说如果一块陆地像素与海洋相邻(上下左右四个相邻像素中有海洋)，它就会被淹没。
+
+例如上图中的海域未来会变成如下样子：
+
+…
+…
+…
+…
+…#…
+…
+…
+
+请你计算：依照科学家的预测，照片中有多少岛屿会被完全淹没。
+
+【输入格式】
+第一行包含一个整数N。 (1 <= N <= 1000)
+以下N行N列代表一张海域照片。
+
+照片保证第1行、第1列、第N行、第N列的像素都是海洋。
+
+【输出格式】
+一个整数表示答案。
+
+【输入样例】
+7
+…
+.##…
+.##…
+…##.
+…####.
+…###.
+…
+
+【输出样例】
+1
+
+资源约定：
+峰值内存消耗（含虚拟机） < 256M
+CPU消耗 < 1000ms
+
+请严格按要求输出，不要画蛇添足地打印类似：“请您输入…” 的多余内容。
+
+所有代码放在同一个源文件中，调试通过后，拷贝提交该源码。
+不要使用package语句。不要使用jdk1.7及以上版本的特性。
+主类的名字必须是：Main，否则按无效代码处理。
+
+import java.util.Scanner;
+
+public class Main {
+       static Scanner input=new Scanner(System.in);
+       static int n=input.nextInt();
+       static char[][] arr1=new char[n][n];
+       static char[][] arr2=new char[n][n];
+    public static void main(String[] args){
+        // TODO code application logic here
+       for(int i=0;i<n;i++)
+       {
+           String s=input.next();
+           arr1[i]=s.toCharArray();
+       }
+       for(int i=1;i<n-1;i++)
+       {
+           for(int j=1;j<n-1;j++)
+           {
+               if(arr1[i][j]=='#'&&arr1[i-1][j]=='#'&&arr1[i+1][j]=='#'&&arr1[i][j-1]=='#'&&arr1[i][j+1]=='#')
+                   arr2[i][j]='#';
+           }
+       }
+       int count1=0,count2=0;
+       for(int i=0;i<n;i++)
+       {
+           for(int j=0;j<n;j++)
+           {
+               if(arr1[i][j]=='#')
+               {
+                   count1++;
+                   Rec(arr1,i,j);
+               }
+           }
+       }
+       for(int i=0;i<n;i++)
+       {
+           for(int j=0;j<n;j++)
+           {
+               if(arr2[i][j]=='#')
+               {
+                   count2++;
+                   Rec(arr2,i,j);
+               }
+           }
+       }  
+       System.out.println(count1-count2);
+    }
+    public static void Rec(char[][] maze,int i,int j)
+    {
+        maze[i][j]='.';
+        if(i+1<n&&maze[i+1][j]=='#')
+            Rec(maze,i+1,j);
+        if(i-1>=0&&maze[i-1][j]=='#')
+            Rec(maze,i-1,j);
+        if(j+1<n&&maze[i][j+1]=='#')
+            Rec(maze,i,j+1);
+        if(j-1>=0&&maze[i][j-1]=='#')
+            Rec(maze,i,j-1);
+    }
+}

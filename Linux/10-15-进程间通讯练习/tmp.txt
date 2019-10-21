@@ -1,0 +1,7 @@
+总用量 40
+-rw-rw-r--. 1 dev dev  127 10月 15 11:04 makefile
+-rwxrwxr-x. 1 dev dev 9112 10月 15 11:18 shell
+-rw-rw-r--. 1 dev dev 1186 10月 15 11:18 shell.c
+-rwxrwxr-x. 1 dev dev 8960 10月 15 11:04 testpipe
+-rw-rw-r--. 1 dev dev  730 10月 15 10:36 testpipe.c
+-rw-rw-r--. 1 dev dev  316 10月 15 11:19 tmp.txt

@@ -1,0 +1,39 @@
+
+如图p1.png所示，在二维平面上有无数个1x1的小方格。
+
+我们以某个小方格的一个顶点为圆心画一个半径为1000的圆。
+你能计算出这个圆里有多少个完整的小方格吗？
+
+注意：需要提交的是一个整数，不要填写任何多余内容。
+
+
+代码
+
+package main;
+
+/**
+ *
+ * @author 隽永
+ */
+public class Main {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        int max=1000;
+        int count=0;
+        for(int i=1;i<=max;i++)
+        {
+            for(int j=1;j<=max;j++)
+            {
+                if(Math.sqrt(i*i+j*j)<=max)
+                    count++;
+            }
+        }
+        System.out.println((4*count));
+    }
+}
+
+答案：3137548

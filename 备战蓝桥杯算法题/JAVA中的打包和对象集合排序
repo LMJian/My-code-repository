@@ -1,0 +1,59 @@
+问题描述
+有n个物体,第i个物体的重量为weight[i],价值为value[i],在总重量不超过max_weight的情况下让总价值尽量高。
+每一个物体都可以只取走一部分,价值和重量按比例计
+求最大总价值
+注意:部个物体可以只拿一部分,因此一定可以让总重量怡好为max_weight
+
+代码
+package main;
+import java.util.Arrays;
+public class Main {  
+    public static void main(String[] args) {
+        int[] weight=new int[]{1,2,3,4,5};
+        int[] value=new int[]{3,4,3,1,4};
+        double max_weight=10;
+        Obj[] arr=new Obj[weight.length];
+        for(int i=0;i<arr.length;i++)
+        {
+            arr[i]=new Obj(weight[i],value[i]);
+        }
+        Arrays.sort(arr);
+       double cnt=0;
+        for(int i=0;i<arr.length;i++)
+        {
+            if(arr[i].weight<=max_weight)
+            {
+                max_weight-=arr[i].weight;
+                cnt+=arr[i].value;
+            }
+            else
+            {
+                cnt+=arr[i].value*(max_weight/arr[i].weight);
+                break;
+            }
+        }
+        System.out.println(cnt);
+    }
+    public static class Obj implements Comparable<Obj>{
+        int weight;
+        int value;
+        public Obj(int weight,int value)
+        {
+            this.weight=weight;
+            this.value=value;
+        }
+        public double get_ratio()
+        {
+            return weight/(double)value;
+        }
+        public int compareTo(Obj o)
+        {
+            if(this.get_ratio()<o.get_ratio())
+                return -1;
+            else if(this.get_ratio()>o.get_ratio())
+                return 1;
+            else
+                return 0;
+        }
+    }
+}

@@ -1,0 +1,8 @@
+总用量 24
+drwxrwxr-x. 2 dev dev   79 10月  5 20:36 .
+drwxrwxr-x. 8 dev dev  146 10月  5 19:17 ..
+-rw-rw-r--. 1 dev dev   34 10月  5 20:35 a.txt
+-rw-rw-r--. 1 dev dev   59 10月  4 16:58 makefile
+-rwxrwxr-x. 1 dev dev 9304 10月  5 20:25 shell
+-rw-rw-r--. 1 dev dev 1204 10月  5 20:24 shell.c
+-rw-rw-r--. 1 dev dev    0 10月  5 20:36 test.txt

@@ -1,0 +1,15 @@
+fd:1
+file
+file.c
+IO
+IO.c
+makefile
+myfile.c
+myfile.txt
+red
+redirect.c
+test
+test.bin
+test.c
+test.txt
+tmp.txt

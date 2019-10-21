@@ -1,0 +1,28 @@
+示例
+输入：{A,B,C}
+输出：{A} {B} {C} {A,B} {A,C} {B,C} {ABC} ∅
+
+思路
+我们可以将集合放在字符串数组里面，运用递归解决此问题，每个字符串递归时都有两种选择，选择此字符串或者不选择，当所有字符串都已循环则输出字符串即为答案。
+
+代码
+package main;
+       
+public class Main { 
+    public static String[] arr=new String[]{"A","B","C"};
+    public static void main(String[] args) {
+       int len=3;
+       Rec("",0,len);
+    }
+    public static void Rec(String string,int start,int len)
+    {
+        if(start==len)
+        {
+            System.out.println(string);
+            return;
+        }
+        Rec(string+arr[start],start+1,len);
+        Rec(string,start+1,len);       
+    }
+}
+ 

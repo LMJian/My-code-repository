@@ -1,0 +1,76 @@
+
+小明正在整理一批历史文献。这些历史文献中出现了很多日期。小明知道这些日期都在1960年1月1日至2059年12月31日。令小明头疼的是，这些日期采用的格式非常不统一，有采用年/月/日的，有采用月/日/年的，还有采用日/月/年的。更加麻烦的是，年份也都省略了前两位，使得文献上的一个日期，存在很多可能的日期与其对应。
+
+比如02/03/04，可能是2002年03月04日、2004年02月03日或2004年03月02日。
+
+给出一个文献上的日期，你能帮助小明判断有哪些可能的日期对其对应吗？
+
+输入
+
+一个日期，格式是"AA/BB/CC"。 (0 <= A, B, C <= 9)
+
+输入
+
+输出若干个不相同的日期，每个日期一行，格式是"yyyy-MM-dd"。多个日期按从早到晚排列。
+
+样例输入
+
+02/03/04
+
+样例输出
+
+2002-03-04
+2004-02-03
+2004-03-02
+
+资源约定：
+峰值内存消耗（含虚拟机） < 256M
+CPU消耗 < 1000ms
+
+请严格按要求输出，不要画蛇添足地打印类似：“请您输入…” 的多余内容。
+
+所有代码放在同一个源文件中，调试通过后，拷贝提交该源码。
+不要使用package语句。不要使用jdk1.7及以上版本的特性。
+主类的名字必须是：Main，否则按无效代码处理。
+
+
+
+package main;
+
+import static java.util.Arrays.sort;
+import java.util.Scanner;
+
+public class Main
+{
+	public static void main(String[] args){
+            Scanner in=new Scanner(System.in);
+            String s=in.next();
+            int a=Integer.parseInt(s.substring(0, 2));
+            int b=Integer.parseInt(s.substring(3, 5));
+            int c=Integer.parseInt(s.substring(6, 8));
+            int[] data=new int[3];//abc  cba  cab 
+            data[0]=a*10000+b*100+c;
+            data[1]=c*10000+b*100+a;
+            data[2]=c*10000+a*100+b;
+            sort(data);
+            for(int i=0;i<3;i++)
+                print(data[i]/10000,data[i]/100%100,data[i]%100);
+        }
+        public static void print(int year,int month,int day){
+            int days[]=new int[]{0,31,28,31,30,31,30,31,31,30,31,30,31};
+            if(year%4!=0||(year%4==0&&month!=2))
+            {
+                if(month<=0||month>12||day<=0||day>days[month])
+                    return;
+            }
+            else
+            {
+                if(day<=0||day>days[month]+1)
+                    return;
+            }
+            if(year>59)
+                System.out.printf("19%02d-%02d-%02d\n", year,month,day);
+            else
+                System.out.printf("20%02d-%02d-%02d\n", year,month,day);
+        }     
+}
