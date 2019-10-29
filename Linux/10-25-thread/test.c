@@ -1,16 +1,20 @@
 #include<stdio.h>
 #include<unistd.h>
 #include<pthread.h>
-
+#include<stdlib.h>
+#include<string.h>#include<stdlib.h>
+#include<string.h>#include<stdlib.h>
+#include<string.h>
 
 void* ThreadEntry(void* arg)
 {
+ // pthread_detach(pthread_self());
   int *p=(int*)arg;
   (void) arg;
 
   while(1)
   {
-    printf("In ThreadEntry\n");
+    printf("In ThreadEntry---pid=%d,tid=%p\n",getpid(),pthread_self());
     sleep(1);
     ++*p;
   }
@@ -27,10 +31,12 @@ int main()
     perror("create errno\n");
     return -1;
   }
-  pthread_detach(tid);
+
+  pthread_detach(pthread_self());
+  sleep(1);
   while(1)
   {  
-    printf("In main Thread %d\n",*p);
+    printf("In main Thread %d---pid=%d,tid=%p\n",*p,getpid(),pthread_self());
     sleep(1);
   }
   //pthread_cancel(tid);

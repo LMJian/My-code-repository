@@ -6,9 +6,9 @@
 
 void *thread_run(void* arg){
   sleep(1);
-  pthread_detach(pthread_self());
+  pthread_detach(pthread_sel:q
+      f());
   printf("%s\n",(char*)arg);
-  //sleep(5);
   int *p=(int*)malloc(sizeof(int));
   *p=4;
   return (void*)p;
