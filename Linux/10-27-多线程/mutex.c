@@ -9,6 +9,7 @@ pthread_mutex_t mutex;
 
 void *route(void *arg){
   char *id=(char*)arg;
+  
   while(1){
     pthread_mutex_lock(&mutex);
     if(ticket>0){

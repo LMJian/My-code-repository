@@ -3,7 +3,7 @@
 #include<unistd.h>
 #include<stdlib.h>
 #include<signal.h>
-#define THREAD_NUM 1
+#define THREAD_NUM 2
 
 int g_count=0;
 pthread_mutex_t mutex;
@@ -20,15 +20,15 @@ void ModifyCount(){
 
 void* ThreadEntry1(void *arg){
   (void)arg;
-  /*for(int i=0;i<50000;++i){
+  for(int i=0;i<50000;++i){
     ModifyCount();
-  }*/
-  while(1){
+  }
+  /*while(1){
     printf("传球！！\n");
     pthread_cond_signal(&cond);
     usleep(789789);
   }
-  return NULL;
+  return NULL;*/
 }
 void* ThreadEntry2(void *arg){
   (void)arg;
@@ -46,26 +46,26 @@ void MyHandler(int sig){
 int main(){
   pthread_mutex_init(&mutex,NULL);
   pthread_cond_init(&cond,NULL);
-  pthread_t tid1,tid2;
+  pthread_t tid[THREAD_NUM];
 
-  pthread_create(&tid1,NULL,ThreadEntry1,NULL);
+  /*pthread_create(&tid1,NULL,ThreadEntry1,NULL);
   pthread_create(&tid2,NULL,ThreadEntry2,NULL);
 
   pthread_join(tid1,NULL);
-  pthread_join(tid2,NULL);
+  pthread_join(tid2,NULL);*/
 
-  pthread_cond_destroy(&cond);
-  //signal(SIGINT,MyHandler);
+  signal(SIGINT,MyHandler);
   
-  /*pthread_t tid[THREAD_NUM];
+  //pthread_t tid[THREAD_NUM];
   for(int i=0;i<THREAD_NUM;++i){
-    pthread_create(&tid[i],NULL,ThreadEntry,NULL);
+    pthread_create(&tid[i],NULL,ThreadEntry1,NULL);
   }
   for(int i=0;i<THREAD_NUM;++i){
     pthread_join(tid[i],NULL);
   }
-  printf("g_count=%d\n",g_count);*/
+  printf("g_count=%d\n",g_count);
  
   pthread_mutex_destroy(&mutex);
+  pthread_cond_destroy(&cond);
   return 0;
 }
