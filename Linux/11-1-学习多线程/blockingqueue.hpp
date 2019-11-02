@@ -4,6 +4,7 @@
 #include<vector>
 #include<pthread.h>
 
+//阻塞队列
 template<class T>
 class BlockingQueue{
   public:
@@ -14,26 +15,32 @@ class BlockingQueue{
        ,size_(0)
        ,queue_(max_size){
         sem_init(&lock_,0,1);
-
-
+        sem_init(&elem_,0,0);
+        sem_init(&blank_,0,max_size);
     }
     ~BlockingQueue()
     {
       sem_destroy(&lock_);
+      sem_destroy(&elem_);
+      sem_destroy(&blank_);
     }
     void Push(const T& data){
+      sem_wait(&blank_);
       sem_wait(&lock_);
       queue_[tail_]=data;
       ++tail_;
       ++size_;
       sem_post(&lock_);
+      sem_post(&elem_);
     }
-    void pop(T* data){
+    void Pop(T* data){
+      sem_wait(&elem_);
       sem_wait(&lock_);
       *data=queue_[head_];
       ++head_;
       --size_;
-      sem_lock(&lock_);
+      sem_post(&lock_);
+      sem_post(&blank_);
     }
   private:
     std::vector<T> queue_; 
@@ -41,17 +48,7 @@ class BlockingQueue{
     int tail_;
     int size_;
     int max_size_;
-    sem_t lock_;
+    sem_t lock_;//互斥锁
+    sem_t elem_;//已用资源数
+    sem_t blank_;//可用资源数
 };
-int main()
-{
-  sem_init(&sem,0,2);
-  
-
-  sem_destroy(&sem);
-  return 0;
-}
-
-
-
-
