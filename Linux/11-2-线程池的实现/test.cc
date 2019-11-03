@@ -9,11 +9,12 @@ class MyStack:public Stack{
     MyStack(int n)
       :_id(n)
     {}
-    void Run()
+    virtual void Run()override
     {
       printf("MyStack---tid=%d,id=%d\n",syscall(SYS_gettid),_id);
     }
-    ~MyStack(){}
+    virtual ~MyStack()override
+    {}
   private:
     int _id;
 };
