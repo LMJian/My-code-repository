@@ -17,6 +17,7 @@ class UdpSocket{
       fd_=socket(AF_INET,SOCK_DGRAM,0);
       if(fd_<0){
         perror("socket");
+        return false;
       }
       return true;
     }
