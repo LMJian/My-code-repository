@@ -52,8 +52,10 @@ class TcpServer{
           handler(req,&resp);
           //把响应写回客户端
           client_sock.Send(resp);
+          printf("[%s:%d]req:%s,resp:%s\n",ip.c_str(),port,req.c_str(),resp.c_str());
       }
     }
+      return true;
     }
   private:
     TcpSocket listen_sock;

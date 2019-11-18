@@ -38,6 +38,8 @@ class TcpSocket{
       return true;
     }
     //给服务器使用
+    //listen第二个参数代表等待队列的大小
+    //最多允许多少个客户端处于等待状态,如果队列已满，则忽略请求
     bool Listen(){
       int ret=listen(_fd,10);
       if(ret<0){

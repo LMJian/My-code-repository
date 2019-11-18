@@ -29,6 +29,7 @@ class UdpServer{
         hand(buf,&resp);
         if(sock.SendTo(buf,peer_ip,peer_port)==false)
           continue;
+        printf("[%s:%d]buf:%s,resp:%s\n",peer_ip.c_str(),peer_port,buf.c_str(),resp.c_str());
       }
     }
   private:
