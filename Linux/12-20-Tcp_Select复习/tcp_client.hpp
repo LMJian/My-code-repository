@@ -7,10 +7,13 @@ class TcpClient{
     TcpClient(const string& ip,const uint16_t port)
       :_server_ip(ip)
        ,_server_port(port)
-  {
-    if(_sock.Connect(_server_ip,_server_port)==false)
-      perror("Connect");
-  }
+  {}
+    bool Socket(){
+      return _sock.Socket();
+    }
+    bool Connect(){
+      return _sock.Connect(_server_ip,_server_port);
+    }
     ~TcpClient(){
       _sock.Close();
     }
