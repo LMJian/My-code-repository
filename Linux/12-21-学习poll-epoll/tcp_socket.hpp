@@ -5,6 +5,7 @@
 #include<unistd.h>
 #include<arpa/inet.h>
 #include<netinet/in.h>
+#include<fcntl.h>
 
 using namespace std;
 
@@ -19,7 +20,13 @@ class TcpSocket{
         perror("socket");
         return false;
       }
+      int opt=1;
+      setsockopt(_fd,SOL_SOCKET,SO_REUSEADDR,(void*)&opt,sizeof(int));
       return true;
+    }
+    void SetNonBlock(){
+      int flag=fcntl(_fd,F_GETFL,NULL);
+      fcntl(_fd,F_SETFL,flag|O_NONBLOCK);//添加O_NONBLOCK
     }
     bool Close(){
       if(_fd!=-1)
@@ -77,16 +84,22 @@ class TcpSocket{
     //接收请求
     int Recv(string& msg)
     {
-      char buf[1024*2]={0};
-      int n=recv(_fd,buf,sizeof(buf)-1,0);
-      if(n<0){
-        perror("recv");
-        return -1;
+      while(1){
+        //边缘模式下的循环读取数据
+        char buf[3]={0};
+        int n=recv(_fd,buf,sizeof(buf)-1,0);
+        if(n<0){
+          if(errno==EAGAIN)
+            break;
+          perror("recv");
+          return -1;
+        }
+        else if(n==0){
+          return 0;
+        }
+        buf[n]='\0';
+        msg+=buf;
       }
-      else if(n==0){
-        return 0;
-      }
-      msg=buf;
       return 1;
     }
     //写回请求

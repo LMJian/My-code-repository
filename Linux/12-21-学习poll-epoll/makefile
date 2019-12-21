@@ -1,4 +1,6 @@
-all:pollserver client
+all:pollserver client epollserver
+epollserver:tcp_epoll_server.cc
+	g++ $^ -o $@ -std=c++11 -lpthread
 pollserver:tcp_poll_server.cc
 	g++ $^ -o $@ -std=c++11 -lpthread
 client:tcp_client.cc
@@ -6,4 +8,4 @@ client:tcp_client.cc
 
 .PHONY:clean
 clean:
-	rm client pollserver
+	rm client pollserver epollserver
