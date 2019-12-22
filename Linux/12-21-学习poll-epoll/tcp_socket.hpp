@@ -25,8 +25,8 @@ class TcpSocket{
       return true;
     }
     void SetNonBlock(){
-      int flag=fcntl(_fd,F_GETFL,NULL);
-      fcntl(_fd,F_SETFL,flag|O_NONBLOCK);//添加O_NONBLOCK
+      int flag=fcntl(_fd,F_GETFL,NULL);//返回描述符的属性状态信息，第三个参数被忽略
+      fcntl(_fd,F_SETFL,flag|O_NONBLOCK);//设置描述符属性，添加O_NONBLOCK(非阻塞)
     }
     bool Close(){
       if(_fd!=-1)
@@ -84,22 +84,23 @@ class TcpSocket{
     //接收请求
     int Recv(string& msg)
     {
-      while(1){
+      //while(1){
         //边缘模式下的循环读取数据
         char buf[3]={0};
         int n=recv(_fd,buf,sizeof(buf)-1,0);
         if(n<0){
-          if(errno==EAGAIN)
-            break;
-          perror("recv");
+          //if(errno==EAGAIN)//没有数据时进行下次循环
+          //  break;
+          perror("recv error");
           return -1;
         }
         else if(n==0){
+          cout<<"peer shutdown\n";
           return 0;
         }
-        buf[n]='\0';
-        msg+=buf;
-      }
+        //buf[n]='\0';
+        msg=buf;
+      //}
       return 1;
     }
     //写回请求

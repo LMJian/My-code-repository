@@ -71,7 +71,7 @@ class TcpEpollServer{
     bool Start(const string& ip,const uint16_t port,Handler handler){
       if(_sock.Socket()==false)
         return false;
-      _sock.SetNonBlock();
+      //_sock.SetNonBlock();//设置非阻塞
       if(_sock.Bind(ip,port)==false)
         return false;
       if(_sock.Listen()==false)
@@ -93,21 +93,22 @@ class TcpEpollServer{
             if(_sock.Accept(&NewSock,ClientIp,ClientPort)==false)
               continue;
             printf("[%s:%d]客户端已连接！~\n",ClientIp.c_str(),ClientPort);
-            NewSock.SetNonBlock();
+            //NewSock.SetNonBlock();//设置非阻塞
             epoll.Add(NewSock);
           }
           else{
             string msg;
             int n=list[i].Recv(msg);
-            if(n==0){
-              epoll.Del(list[i]);
-              list[i].Close();
-              continue;
-            }else{
+            if(n==1){
               cout<<"客户端发送："<<msg<<endl;
               string ret;
               handler(msg,ret);
               list[i].Send(ret);
+            }
+            else{
+              epoll.Del(list[i]);
+              list[i].Close();
+              continue;
             }
           }
         }

@@ -20,7 +20,7 @@ class TcpClient{
     bool Send(const string& msg){
       return _sock.Send(msg);
     }
-    bool Recv(string& ret){
+    int Recv(string& ret){
       return _sock.Recv(ret);
     }
   private:
