@@ -1,5 +1,4 @@
 //创建一些相关的类来封装数据库操作
-//
 #include<cstdio>
 #include<cstdlib>
 #include<cstring>
@@ -48,6 +47,7 @@ namespace blog_system{
         //文档要求to的长度为content.size()*2+1
         //char* to=new char[content.size()*2+1];
         unique_ptr<char> to(new char[content.size()*2+1]);
+        //**获取MySQL真正的转移字符串**
         mysql_real_escape_string(mysql_,to.get(),content.c_str(),content.size());
         //核心就是拼装sql语句
         unique_ptr<char> sql(new char[content.size()*2+4096]);
@@ -151,8 +151,8 @@ namespace blog_system{
       }
     private:
       MYSQL* mysql_;
-
   };
+
   class TagTable{
     public:
       TagTable(MYSQL* mysql)
@@ -202,6 +202,5 @@ namespace blog_system{
       }
 private:
       MYSQL* mysql_;
-
   };
 }//end blog_system
