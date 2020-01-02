@@ -15,10 +15,10 @@ void TestBlogTable(){
   bool ret=blog_table.Insert(blog);
   printf("insert:%d\n",ret);*/
   //测试查找
-  /*Json::Value blogs;
+  Json::Value blogs;
   ret=blog_table.SelectAll(&blogs);
   printf("SelectAll %d\n",ret);
-  printf("blogs:%s\n",writer.write(blogs).c_str());*/
+  printf("blogs:%s\n",writer.write(blogs).c_str());
 
   //测试查找单个博客
   /*ret=blog_table.SelectOne(1,&blog);
@@ -33,15 +33,15 @@ void TestBlogTable(){
   printf("update %d\n",ret);*/
 
   //测试删除博客
-  ret=blog_table.Delete(1);
+  /*ret=blog_table.Delete(1);
   printf("delete %d\n",ret);
 
-  blog_system::MySQLRelease(mysql);
+  blog_system::MySQLRelease(mysql);*/
 }
 void TestTagTable(){
-  Json::StyledWriter writer;
+  /*Json::StyledWriter writer;
   MYSQL* mysql=blog_system::MySQLInit();
-  blog_system::TagTable tag_table(mysql);
+  blog_system::TagTable tag_table(mysql);*/
   //测试插入
   /*Json::Value tag;
   tag["tag_name"]="C语言";
@@ -55,12 +55,12 @@ void TestTagTable(){
   printf("tags:%s\n",writer.write(tags).c_str());*/
   
   //测试删除
-  bool ret=tag_table.Delete(1);
+  /*bool ret=tag_table.Delete(1);
   printf("delete %d\n",ret);
-  blog_system::MySQLRelease(mysql);
+  blog_system::MySQLRelease(mysql);*/
 }
 int main(){
-  //TestBlogTable();
-  TestTagTable();
+  TestBlogTable();
+  //TestTagTable();
   return 0;
 }

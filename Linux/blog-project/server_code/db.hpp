@@ -13,7 +13,7 @@ namespace blog_system{
     //1.创建句柄
     MYSQL* connect_fd=mysql_init(NULL);
     //2.和数据库建立连接
-    if(mysql_real_connect(connect_fd,"127.0.0.1","root","","blog_system2",3306,NULL,0)==NULL){
+    if(mysql_real_connect(connect_fd,"127.0.0.1","root","LMJian521","blog_system2",3306,NULL,0)==NULL){
       printf("链接失败！!!!%s\n",mysql_error(connect_fd));
       return NULL;
     }
