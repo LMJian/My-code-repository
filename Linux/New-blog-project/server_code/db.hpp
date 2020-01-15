@@ -5,9 +5,9 @@
 #include<string>
 #include<memory>
 
-class blog_table{
+class BlogTable{
   public:
-    blog_table()
+    BlogTable()
     :connect_fd_(nullptr){
       //1.创建数据库连接句柄
       //MYSQL *mysql_init(MYSQL *mysql)
@@ -28,7 +28,7 @@ class blog_table{
       //mysql_set_character_set(MYSQL*,const char*)
       mysql_set_character_set(connect_fd_,"utf8");
     }
-    ~blog_table(){
+    ~BlogTable(){
       //5.关闭数据库句柄
       //void mysql_close(MYSQL *mysql)
       mysql_close(connect_fd_);
@@ -68,7 +68,7 @@ class blog_table{
       printf("删除成功!\n");
       return true;
     }
-    bool Update(const Json::Value blog){
+    bool Update(const Json::Value& blog){
       //拼接sql语句
       const std::string& connect=blog["content"].asString();
       std::unique_ptr<char> to(new char[connect.size()*2+1]);
