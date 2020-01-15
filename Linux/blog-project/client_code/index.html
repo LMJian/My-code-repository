@@ -20,6 +20,12 @@
   <meta name="msapplication-TileColor" content="#0e90d2">
   <link rel="stylesheet" href="assets/css/amazeui.min.css">
   <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+[v-cloak]{
+  display:none;
+
+}
+  </style>
 </head>
 
 <body id="blog">
@@ -28,23 +34,27 @@
 <!-- nav end -->
 <!-- content srart -->
 <div class="am-g am-g-fixed blog-fixed" id="app">
-    <div class="am-u-md-8 am-u-sm-12">
+    <div class="am-u-md-8 am-u-sm-12" v-show="blog.blog_id==null">
 
-        <article class="am-g blog-entry-article">
+        <article class="am-g blog-entry-article" v-for="blog in blogs" v-cloak>
             <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
-                <span><a href="" class="blog-color">article &nbsp;</a></span>
-                <span> @amazeUI &nbsp;</span>
-                <span>2015/10/9</span>
-                <h1><a href="">我本楚狂人，凤歌笑孔丘</a></h1>
-                <p>我们一直在坚持着，不是为了改变这个世界，而是希望不被这个世界所改变。
-                </p>
+              <span><a href="" class="blog-color">{{tag_id2name(blog.tag_id)}} &nbsp;</a></span>
+                <span> @{{author}} &nbsp;</span>
+                <span>{{blog.create_time}}</span>
+                <h1><a v-on:click="get_blog(blog.blog_id)">{{blog.title}}</a></h1>
                 <p><a href="" class="blog-continue">continue reading</a></p>
             </div>
         </article>
     </div>
-
+    
+    <div class="am-u-md-8 am-u-sm-12" v-show="blog.blog_id!=null">
+    <!--先使用editor.md完成markdown到html的转换-->
+      <article id="blog_view">
+      </article>
+    </div>
+   
     <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
-        <div class="blog-sidebar-widget blog-bor">
+        <div class="blog-sidebar-widget blog-bor" v-cloak>
             <h2 class="blog-text-center blog-title"><span>About ME</span></h2>
             <img src="assets/i/f14.jpg" alt="about me" class="blog-entry-img" >
             <!--插值表达式-->
@@ -65,8 +75,8 @@
         </div>
         <div class="blog-clear-margin blog-sidebar-widget blog-bor am-g ">
             <h2 class="blog-title"><span>TAG cloud</span></h2>
-            <div class="am-u-sm-12 blog-clear-padding">
-            <a href="" class="blog-tag">C语言</a>
+            <div class="am-u-sm-12 blog-clear-padding" v-cloak>
+              <a href="" class="blog-tag" v-for="tag in tags">{{tag.tag_name}}</a>
             </div>
         </div>
     </div>
@@ -82,7 +92,6 @@
 
 
 
-
 <!--[if (gte IE 9)|!(IE)]><!-->
 <script src="assets/js/jquery.min.js"></script>
 <!--<![endif]-->
@@ -93,6 +102,17 @@
 <![endif]-->
 <script src="assets/js/amazeui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script src="editor.md/lib/marked.min.js"></script>
+<script src="editor.md/lib/prettify.min.js"></script>
+<script src="editor.md/lib/raphael.min.js"></script>
+<script src="editor.md/lib/underscore.min.js"></script>
+<script src="editor.md/lib/sequence-diagram.min.js"></script>
+<script src="editor.md/lib/flowchart.min.js"></script>
+<script src="editor.md/lib/jquery.flowchart.min.js"></script>
+<script src="editor.md/editormd.js"></script>
+
+
 <script>
 var app=new Vue({
     el:'#app',//el表示app这个vue对象和哪个html元素关联上
@@ -100,8 +120,100 @@ var app=new Vue({
         //data表示所有需要在页面上动态变化的数据
         //把js中的数据和界面上的内容关联在一起，数据绑定的过程
         author:'LMJian',
-    }
+        blogs:[
+        ],
+        tags:[
+        ],
+      //blog对象用来保存当前页面上展示的博客详细内容
+      blog:{
+        blog_id:null,
+        title:null,
+        content:null,
+        create_time:null,
+        tag_id:null,
+      }
+    },
+  methods:{
+    tag_id2name(tag_id){
+      //this访问到当前的app对象
+      //this.tags就相当于上面定义的标签数组
+      for(var index in this.tags){
+        if(this.tags[index].tag_id==tag_id){
+          return this.tags[index].tag_name;
+        }
+      }
+      return "默认分类";
+    },
+    get_blogs(tag_id){
+      var url="/blog";
+      if(tag_id!=null){
+        url='/blog/?tag_id='+tag_id;
+      }
+      //最核心操作，访问http服务器数据
+      //使用JQuery提供的API
+      $.ajax({
+        'url':url,
+        type:"get",
+        context:this,//此处的this表示Vue对象
+        success:function(data,status){
+          //data表示响应的body数据
+          //status表示响应的状态码
+          //http请求执行成功后要执行这个代码
+          //在这个代码中更新数据
+          //如果不设置context,此时直接使用this.blogs是出错的
+          //因为此时的this表示当前$这样的jquery对象
+          //而不是Vue对象,加上context之后，this表示context中的值
+          this.blogs=data;
+        }
+      })
+    },
+    init(){
+      //1.从服务器上获取tag
+      $.ajax({
+        type:"get",
+        url:"/tag",
+        context:this,
+        success:function(data,status){
+          this.tags=data;
+          //2.从服务器上获取博客
+          this.get_blogs();
+        }
+      })
+    },
+
+    //点击博客标题，调用这个函数
+      get_blog(blog_id){
+        $.ajax({
+          url:'/blog/'+blog_id,
+          type:"get",
+          context:this,
+          success:function(data,status){
+            //此时数据是markdown格式的
+            this.blog=data;
+            //把这个格式的数据转成html，并显示在界面上
+            testEditormdView = editormd.markdownToHTML("blog-view", {
+              markdown        : this.blog.content ,//+ "\r\n" + $("#append-test").text(),
+              //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+              htmlDecode      : "style,script,iframe",  // you can filter tags decode          ;
+              //toc             : false,
+              tocm            : true,    // Using [TOCM]
+              //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+              //gfm             : false,
+              //tocDropdown     : true,
+              // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+              emoji           : true,
+              taskList        : true,
+              tex             : true,  // 默认不解析
+              flowChart       : true,  // 默认不解析
+              sequenceDiagram : true,  // 默认不解析                        
+            });
+          }
+        })
+      }
+  },
 });
+//初始化获取数据操作
+app.init();
 </script>
 </body>
 </html>
