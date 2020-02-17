@@ -20,7 +20,8 @@ int main(){
     MyStart *p=new MyStart(i);
     pool.push(p);
   }
-  while(1)
-    sleep(1);
+  //while(1)
+    sleep(6);
+  pool.threadClear();
   return 0;
 }
