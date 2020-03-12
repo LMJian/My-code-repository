@@ -13,7 +13,9 @@ class Tcp{
       :fd_(-1)
     {}
     ~Tcp()
-    {}
+    {
+      Close();
+    }
     bool Socket(){
       fd_=socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
       if(fd_<0){
