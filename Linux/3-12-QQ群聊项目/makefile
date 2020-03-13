@@ -1,5 +1,5 @@
 all:client server
-server:server.cpp
+server:server.cpp threadpool.cpp
 	g++ server.cpp -o server -lpthread
 
 client:client.cpp
