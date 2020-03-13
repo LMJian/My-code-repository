@@ -43,10 +43,10 @@ int main(int argc,char* argv[]){
     char buf[1024]={0};
     n=read(0,buf,1023);
     if(n>0){
-      send(fd,buf,n,MSG_DONTWAIT);//非阻塞发送
+      send(fd,buf,n,0);
     }
     memset(buf,0,1024);
-    n=recv(fd,buf,1023,MSG_DONTWAIT);
+    n=recv(fd,buf,1023,MSG_DONTWAIT); //这里需要是非阻塞
     if(n>0){
       printf("%s",buf);
     }

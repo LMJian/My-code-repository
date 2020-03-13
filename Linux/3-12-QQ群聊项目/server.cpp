@@ -57,7 +57,7 @@ class MyStart:public Start{
           if((*it)->_fd!=_fd){
             char str[1024]={0};
             int n=sprintf(str,"%s:%d-->%s",_ip.c_str(),_port,buf);
-            send((*it)->_fd,str,n,MSG_DONTWAIT);//非阻塞发送
+            send((*it)->_fd,str,n,0);   //阻塞非阻塞都可以
           }
           ++it;
       }
