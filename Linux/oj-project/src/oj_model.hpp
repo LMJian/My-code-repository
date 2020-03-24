@@ -41,7 +41,7 @@ class OjModel{
         //1 单链表 ./xxx 难度
         //1、需要切割字符串
         std::vector<std::string> vec;
-        StringTools::Split(line,"\t",&vec);
+        StringTools::Split(line," ",&vec);
         if(vec.size()!=4){
           continue;
         }
@@ -57,6 +57,5 @@ class OjModel{
       return true;
     }
   private:
-    //unordered_map<key(id),value(TestQues)>
     std::unordered_map<std::string,Questions> model_map_; 
 };
