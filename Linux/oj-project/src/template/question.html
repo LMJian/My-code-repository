@@ -1,12 +1,17 @@
 <html>
-  <head>
-    <title>在线OJ</title>
-  </head>
-  <body>
-    {{#question}}
-    <div>
-      <a href="/question/{{id}}"><h2>{{id}}.{{name}} {{star}}</h2><a>
-    </div>
-    {{/question}}
-  </body>
+<head>
+	<title>在线OJ</title>
+</head>
+<body>
+<!--描述-->
+<div>{{id}}.{{name}} {{star}}</div>
+<div>{{desc}}</div>
+<!--代码的编辑框-->
+<div>
+  <form action="https:www.baidu.com"method="POST">
+    <textarea name="name" rows=20 cols=100>{{header}}</textarea>
+    <input type="Submit" formenctype="appliaction/json" value="Submit">
+  </form>
+</div>
+</body>
 </html>

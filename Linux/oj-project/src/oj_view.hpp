@@ -8,7 +8,7 @@
 class OjView{
   public:
     //渲染html页面，并且将将页面返还给调用
-    static void ExpandAllQuestionshtml(std::string* html,std::vector<Questions>& ques){
+    static void ExpandAllQuestionshtml(std::string* html,std::vector<Question>& ques){
       //1.获取数据字典--->将拿到的试题数据按照一定顺序保存到内存当中
       ctemplate::TemplateDictionary dict("all_questions");
 
@@ -25,7 +25,7 @@ class OjView{
      tl->Expand(html,&dict);  
     }
     //id name star desc header ==> string html
-    static void ExpandOneQuestion(const Questions& ques,std::string& desc,std::string& header,std::string* html){
+    static void ExpandOneQuestion(const Question& ques,std::string& desc,std::string& header,std::string* html){
       ctemplate::TemplateDictionary dict("question");
       dict.SetValue("id",ques.id_);
       dict.SetValue("name",ques.name_);

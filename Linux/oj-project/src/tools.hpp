@@ -4,6 +4,7 @@
 #include<boost/algorithm/string.hpp>
 #include<fstream>
 #include"oj_log.hpp"
+#include<unordered_map>
 
 //实现一个切割字符串
 class StringTools{
@@ -26,9 +27,28 @@ class FileOper{
       std::string line;
       while(std::getline(file,line)){
         *content+=line+"\n";
-
       }
       file.close();
       return 0;
     }
 };
+
+class UrlUtil{
+  public:
+    static void PraseBody(std::string& body,std::unordered_map<std::string,std::string>* pram){
+      //name=xxx&stdin=xxxx
+      std::vector<std::string> tokens;
+      StringTools::Split(body,"&",&tokens);
+      for(const auto& token::tokens){
+        //name=xxxx
+        std::vector<std::string> vec;
+        StringTools::Split(tokens,"=",&vec);
+        if(vec.size()!=2){
+          continue;
+        }
+        //url解码 vec[1]
+      }
+    }
+};
+
+
