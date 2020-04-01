@@ -2,12 +2,14 @@
 #include<iostream>
 #include<string>
 #include<unordered_map>
-#include<fstream>
-#include"tools.hpp"
 #include<vector>
+#include<fstream>
 #include<algorithm>
+
+#include"tools.hpp"
 #include"oj_log.hpp"
 
+//试题id 试题名称 试题路径 试题难度
 typedef struct Question{
   std::string id_;
   std::string name_;
@@ -25,11 +27,18 @@ class OjModel{
         ques->push_back(kv.second);
       }
 
+      //arr[10]
+      //sort(arr,arr+5)
+      //sort(arr,arr+10,func)
+      //针对内置类型进行操作的
+      //std::greater降序排序
+      //std::less升序进行排序
       std::sort(ques->begin(),ques->end(),[](const Question& l,const Question& r){
           return std::atoi(l.id_.c_str())<std::atoi(r.id_.c_str());
           });
       return true;
     }
+
     bool GetOneQuestion(const std::string& id,std::string* desc,std::string* header,Question* ques){
       //1. 根据id去查找对应的题目信息，最重要的是这个题目在哪加载
       auto iter=model_map_.find(id);
@@ -47,6 +56,7 @@ class OjModel{
         LOG(ERROR,"Read desc failed")<<std::endl;
         return false;
       }
+
       ret=FileOper::ReadDataFromFile(HeaderPath(iter->second.path_),header);
       if(ret==-1){
         LOG(ERROR,"Read desc failed")<<std::endl;
@@ -54,13 +64,14 @@ class OjModel{
       }
       return true;
     }
+
   private:
     bool LoadQuetions(const std::string& configfile_path){
-     //使用C++文件流加载文件，并且获取文件当中的内容 
       std::ifstream file(configfile_path.c_str());
       if(!file.is_open()){
         return false;
       }
+
       std::string line;
       while(std::getline(file,line)){
         //1 单链表 ./xxx 难度
@@ -82,6 +93,18 @@ class OjModel{
       return true;
     }
 
+    bool SplicingCode(std::string user_code,const std::string& ques_id,std::string* code){
+      //1.查找下对应id的题目是否存在
+      auto iter=model_map_.find(ques_id);
+      if(iter===model_map_.end()){
+        LOG(ERROR,"can not find question id is")<<ques_id<<std::endl;
+        return false;
+      }
+
+      std::string tail_code;
+      int ret=FileOper::ReadDataFromFile(TailPath(iter->second.path_),)
+    }
+
   private:
     std::string DescPath(const std::string& ques_path){
       return ques_path+"desc.txt";
@@ -89,5 +112,6 @@ class OjModel{
     std::string HeaderPath(const std::string& ques_path){
       return ques_path+"header.cpp";
     }
+  private:
     std::unordered_map<std::string,Question> model_map_; 
 };

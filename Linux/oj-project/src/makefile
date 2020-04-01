@@ -4,4 +4,4 @@ oj_server:oj_server.cpp
 
 .PHONY:clean
 clean:
-	rm server
+	rm oj_server
