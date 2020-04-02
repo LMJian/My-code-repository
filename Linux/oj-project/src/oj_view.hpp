@@ -1,4 +1,6 @@
 #pragma once
+//直接包含，直接使用，痛点：在编写代码当中由于找不到头文件，所以会报错，编译的时候，使用-I选项指定头文件的路径就可以了
+//设置环境变量CPLUS_INCLUDE_PATH
 #include<ctemplate/template.h>
 #include<string>
 #include<vector>
@@ -24,6 +26,7 @@ class OjView{
       //3.渲染，拿着模板类的指针，将数据字典当中的数据更新到html页面的内存中
      tl->Expand(html,&dict);  
     }
+
     //id name star desc header ==> string html
     static void ExpandOneQuestion(const Question& ques,std::string& desc,std::string& header,std::string* html){
       ctemplate::TemplateDictionary dict("question");
@@ -34,8 +37,6 @@ class OjView{
       dict.SetValue("header",header);
 
       ctemplate::Template* tpl=ctemplate::Template::GetTemplate("./template/question.html",ctemplate::DO_NOT_STRIP);
-      if(!tpl)
-        tpl->Expand(html,&dict);
-
+      tpl->Expand(html,&dict);
     }
 };

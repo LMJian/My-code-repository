@@ -93,18 +93,24 @@ class OjModel{
       return true;
     }
 
-    bool SplicingCode(std::string user_code,const std::string& ques_id,std::string* code){
+    /*bool SplicingCode(std::string user_code,const std::string& ques_id,std::string* code){
       //1.查找下对应id的题目是否存在
       auto iter=model_map_.find(ques_id);
-      if(iter===model_map_.end()){
+      if(iter==model_map_.end()){
         LOG(ERROR,"can not find question id is")<<ques_id<<std::endl;
         return false;
       }
 
       std::string tail_code;
-      int ret=FileOper::ReadDataFromFile(TailPath(iter->second.path_),)
-    }
+      int ret=FileOper::ReadDataFromFile(TailPath(iter->second.path_),&tail_code);
+      if(ret<0){
+        LOG(ERROR,"Open tail.cpp failed");
+        return false;
+      }
 
+      *code=user_code+tail_code;
+      return true;
+    }*/
   private:
     std::string DescPath(const std::string& ques_path){
       return ques_path+"desc.txt";
