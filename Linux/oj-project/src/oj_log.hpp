@@ -17,6 +17,7 @@ class LogTime{
       gettimeofday(&tv,NULL);
       return tv.tv_sec;
     }
+
     //返回 年-月-日 时:分:秒
     static void GetTimeStamp(std::string* TimeStamp){
       time_t SysTime;
@@ -35,7 +36,7 @@ const char* Level[]={
   "WARNING",
   "ERROR",
   "FATAL",
-  "DEBUG"
+  "DEBUG",
 };
 
 enum LogLevel{
@@ -43,7 +44,7 @@ enum LogLevel{
   WARNING,
   ERROR,
   FATAL,
-  DEBUG
+  DEBUG,
 };
 
 inline std::ostream& Log(LogLevel lev,const char* file,int line,const std::string& logmsg){

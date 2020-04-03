@@ -39,4 +39,14 @@ class OjView{
       ctemplate::Template* tpl=ctemplate::Template::GetTemplate("./template/question.html",ctemplate::DO_NOT_STRIP);
       tpl->Expand(html,&dict);
     }
+
+    static void ExpandReason(const std::string& errorno,const std::string& reason,const std::string& stdout_reason,std::string* html){
+      ctemplate::TemplateDictionary dict("reason");
+      dict.SetValue("errorno",errorno);
+      dict.SetValue("reason",reason);
+      dict.SetValue("stdout",stdout_reason);
+
+      ctemplate::Template* tpl=ctemplate::Template::GetTemplate("./template/reason.html",ctemplate::DO_NOT_STRIP);
+      tpl->Expand(html,&dict);
+    }
 };

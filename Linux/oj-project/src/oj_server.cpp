@@ -6,7 +6,7 @@
 #include"oj_model.hpp"
 #include"oj_view.hpp"
 #include"oj_log.hpp"
-
+#include"compile.hpp"
 
 int main(){
   //httplib的时候，需要使用httplib提供的命名空间
@@ -78,22 +78,26 @@ int main(){
       //   提交的内容当中有url编码--->提交内容进行解码
       //   提取完成后的数据放到unordered_map<std::string,std::string>
       std::unordered_map<std::string,std::string> pram;
-      UrlUtil::PraseBody(req,&pram);
+      UrlUtil::PraseBody(req.body,&pram);
       //for(const auto& pr:pram){
       //  LOG(INFO,"code")<<pr.second<<std::endl;
       //}
       //2.编译&运行
       //  2.1需要给提交的代码增加头文件，测试用例，main函数
       std::string code;
-      //oxxxxxxxxxxxxxx ojmodel.
+      ojmodel.SplicingCode(pram["code"],req.matches[1].str(),&code);
       //LOG(INFO,"code ")<<code<<std::endl;
-      //Json::Value req_json;
-      //req_json["code"]=code;
+      Json::Value req_json;
+      req_json["code"]=code;
       //req_json["stdin"]=""
-      //Json::value Resp_json;
-      //oxxxxxxxx Compiler::
-      //3.构造响应，json
-      std::string html="1";
+      Json::Value Resp_json;
+      Compiler::CompilerAndRun(req_json,&Resp_json);
+      //3.构造响应
+      const std::string errorno=Resp_json["errorno"].asString();
+      const std::string reason=Resp_json["reason"].asString();
+      const std::string stdout_reason=Resp_json["stdout"].asString();
+      std::string html;
+      OjView::ExpandReason(errorno,reason,stdout_reason,&html);
       resp.set_content(html,"text/html; charset=UTF-8");
       });
   LOG(INFO,"listen in 0.0.0.0:9090")<<std::endl;

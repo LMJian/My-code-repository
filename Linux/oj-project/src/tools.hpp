@@ -32,19 +32,30 @@ class FileOper{
       file.close();
       return 0;
     }
-    //
+
+    static int WriteDataToFile(const std::string& filename,const std::string& Data){
+      std::ofstream file(filename.c_str());
+      if(!file.is_open()){
+        LOG(ERROR,"Open file failed")<<filename<<std::endl;
+        return -1;
+      }
+
+      file.write(Data.data(),Data.size());
+      file.close();
+      return 0;
+    } 
 };
 
 class UrlUtil{
   public:
-    static void PraseBody(std::string& body,std::unordered_map<std::string,std::string>* pram){
+    static void PraseBody(const std::string& body,std::unordered_map<std::string,std::string>* pram){
       //name=xxx&stdin=xxxx
       std::vector<std::string> tokens;
       StringTools::Split(body,"&",&tokens);
-      for(const auto& token::tokens){
+      for(const auto& token:tokens){
         //name=xxxx
         std::vector<std::string> vec;
-        StringTools::Split(tokens,"=",&vec);
+        StringTools::Split(token,"=",&vec);
         if(vec.size()!=2){
           continue;
         }
@@ -53,7 +64,7 @@ class UrlUtil{
     }
   private:
     static unsigned char ToHex(unsigned char x){
-      return x>9>x+55:x+48;
+      return x>9?x+55:x+48;
     }
 
     static unsigned char FromHex(unsigned char x){
@@ -86,12 +97,12 @@ class UrlUtil{
           strTemp+=ToHex((unsigned char)str[i]>>4);
           strTemp+=ToHex((unsigned char)str[i]%16);
 
-
         }
       }
       return strTemp;
 
     }
+
     static std::string UrlDecode(const std::string& str){
       std::string strTemp="";
       size_t length=str.length();
@@ -111,5 +122,3 @@ class UrlUtil{
       return strTemp;
     }
 };
-
-
