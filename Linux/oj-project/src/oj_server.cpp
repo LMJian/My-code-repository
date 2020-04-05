@@ -13,6 +13,7 @@ int main(){
   using namespace httplib;
   Server svr;
   OjModel ojmodel;
+  
   //lambda []表达式的引出符，lambda函数的捕获列表
   //[var]:值传递方式将var变量传递到lambda函数当中去
   //[=]：值传递方式捕获所有父作用域当中的变量
@@ -100,6 +101,7 @@ int main(){
       OjView::ExpandReason(errorno,reason,stdout_reason,&html);
       resp.set_content(html,"text/html; charset=UTF-8");
       });
+  
   LOG(INFO,"listen in 0.0.0.0:9090")<<std::endl;
   LOG(INFO,"Server ready")<<std::endl;
   //listen会阻塞
