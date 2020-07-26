@@ -68,7 +68,7 @@ public:
       FileUtil::Read(CompileErrorPath(file_name),&reason);
       (*resp)["reason"]=reason;
       //虽然是编译出错，但是是用户自己的错误，不是服务器的
-      LOG(INFO)<<"Compile failed!"<<std;:endl;
+      LOG(INFO)<<"Compile failed!"<<std::endl;
       return false;
     }
     //3.调用可执行程序，把标准输入记录到文件中，然后把文件中的内容重定向给可执行程序，
@@ -156,7 +156,7 @@ private:
       return false;
     }
     LOG(INFO)<<"Compile "<<file_name<<"OK!"<<std::endl;
-    return ture;
+    return true;
   }
 
   static int Run(const std::string& file_name){
