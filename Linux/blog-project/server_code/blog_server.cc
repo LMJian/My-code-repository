@@ -1,6 +1,6 @@
+#include<signal.h>
 #include"httplib.h"
 #include"db.hpp"
-#include<signal.h>
 
 
 MYSQL* mysql=NULL;
