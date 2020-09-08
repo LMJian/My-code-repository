@@ -1,3 +1,13 @@
+#include<iostream>
+#include<string>
+#include<vector>
+
+class Solution{
+public:
+    bool isPalindrome(int x){
+         return true;
+    }
+};
 
 //tail.cpp不给用户看的，最终编译的时候
 //会把用户提交的代码和tail.cpp合并成一个文件再进行编译
