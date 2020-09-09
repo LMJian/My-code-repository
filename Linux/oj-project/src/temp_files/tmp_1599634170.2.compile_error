@@ -1,0 +1,8 @@
+./temp_files/tmp_1599634170.2.cpp: In member function ‘bool Solution::isPalindrome(int)’:
+./temp_files/tmp_1599634170.2.cpp:10:32: error: ‘rend’ was not declared in this scope
+          string b(a.rbegin(),a,rend());
+                                ^~~~
+./temp_files/tmp_1599634170.2.cpp:10:32: note: suggested alternative: ‘rand’
+          string b(a.rbegin(),a,rend());
+                                ^~~~
+                                rand

@@ -1,13 +1,90 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <meta charset="utf-8">
+        <title>LMJian's Online Judge</title>
+        <meta name="description" content="基于 C++ 实现的在线 OJ 平台" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--Bootstrap 4-->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     </head>
+
     <body>
-        <h1>题目列表</h1>
-        {{#question}}
-        <div>
-            <a href = "/question/{{id}}">{{id}}.{{name}}.{{star}}</a>
-        </div>
-        {{/question}}
+
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top sticky-navigation">
+            <a class="navbar-brand font-weight-bold" href="#">在线 OJ</a>
+        </nav>
+
+        <!--hero section-->
+        <section class="bg-hero">
+            <div class="container">
+                <div class="row vh-100">
+                    <div class="col-sm-12 my-auto text-center">
+                        <h1>LMJian's Online Judge</h1>
+                        <p class="lead text-capitalize my-4">
+                            基于 C++ 搭建的在线OJ判题系统
+                        </p>
+                        <a href="http://www.sogou.com" class="btn btn-outline-light btn-radius btn-lg">设计思路</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--components-->
+        <section class="my-5 pt-5">
+            <div class="container">
+                <!-- Tables  -->
+                <div class="row mb-5" id="tables">
+                    <div class="col-sm-12">
+                        <div class="mt-3 mb-5">
+                            <h3>题库</h3>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>题目序号</th>
+                                        <th>题目名称</th>
+                                        <th>题目难度</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {{#question}}
+                                    <tr>
+                                        <td>{{id}}</td>
+                                        <td><a href="/question/{{id}}">{{name}}</a></td>
+                                        <td>{{star}}</td>
+                                    </tr>
+                                    {{/question}}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--footer-->
+        <section class="py-5 bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-xs-12 text-center">
+                        <!-- <h3>Upgrade to Pro Version</h3>
+                        <p class="pt-2">
+                            We are working on <b>Charcoal Pro</b> which will be released soon. The pro version 
+                            will have a lot more components, sections, icons, plugins and example pages. 
+                            Join the waiting list to get notified when we release it (plus discount code).
+                        </p>
+                        <a class="btn btn-warning" href="https://wireddots.com/newsletter">Join Waiting List</a>
+                        <hr class="my-5"/> -->
+                        <p class="pt-2 text-muted">
+                            &copy; 2020 LMJian
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </body>
 </html>
