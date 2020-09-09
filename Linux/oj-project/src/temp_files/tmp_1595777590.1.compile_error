@@ -1,6 +1,0 @@
-./temp_files/tmp_1595777590.1.cpp:1:19: warning: extra tokens at end of #include directive
- #include<stdio.h> int main(){ printf("hehe"); return 0;}
-                   ^~~
-/lib/../lib64/crt1.o: In function `_start':
-(.text+0x20): undefined reference to `main'
-collect2: error: ld returned 1 exit status
