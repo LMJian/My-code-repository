@@ -3,15 +3,15 @@
 #include<vector>
 using namespace std;
 
-class Solution{
+class Solution {
 public:
-    bool isPalindrome(int x){
-         return true;
+    int minimum(int a, int b) {
+        return a<b?a:b;
     }
 };
-void Test1(const Solution& s){
-    bool ret = s.isPalindrome(121);
-    if(ret){
+void Test1(Solution& s){
+    int ret = s.minimum(1,2);
+    if(ret == 1){
         std::cout<<"Test1 OK"<<std::endl;
     }
     else{
@@ -19,9 +19,9 @@ void Test1(const Solution& s){
     }
 }
 
-void Test2(const Solution& s){
-    bool ret = s.isPalindrome(-121);
-    if(!ret){
+void Test2(Solution& s){
+    int ret = s.minimum(2,1);
+    if(ret == 1){
         std::cout<<"Test2 OK"<<std::endl;
     }
     else{
@@ -29,9 +29,9 @@ void Test2(const Solution& s){
     }
 }
 
-void Test3(const Solution& s){
-    bool ret = s.isPalindrome(10);
-    if(!ret){
+void Test3(Solution& s){
+    int ret = s.minimum(10, 99);
+    if(ret == 10){
         std::cout<<"Test3 OK"<<std::endl;
     }
     else{

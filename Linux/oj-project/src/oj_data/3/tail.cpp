@@ -1,17 +1,6 @@
-#include<iostream>
-#include<string>
-#include<vector>
-using namespace std;
-
-class Solution{
-public:
-    bool isPalindrome(int x){
-         return true;
-    }
-};
 void Test1(Solution& s){
-    bool ret = s.isPalindrome(121);
-    if(ret){
+    int ret = s.minimum(1,2);
+    if(ret == 1){
         std::cout<<"Test1 OK"<<std::endl;
     }
     else{
@@ -20,8 +9,8 @@ void Test1(Solution& s){
 }
 
 void Test2(Solution& s){
-    bool ret = s.isPalindrome(-121);
-    if(!ret){
+    int ret = s.minimum(2,1);
+    if(ret == 1){
         std::cout<<"Test2 OK"<<std::endl;
     }
     else{
@@ -30,8 +19,8 @@ void Test2(Solution& s){
 }
 
 void Test3(Solution& s){
-    bool ret = s.isPalindrome(10);
-    if(!ret){
+    int ret = s.minimum(10, 99);
+    if(ret == 10){
         std::cout<<"Test3 OK"<<std::endl;
     }
     else{

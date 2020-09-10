@@ -3,17 +3,15 @@
 #include<vector>
 using namespace std;
 
-class Solution{
+class Solution {
 public:
-    bool isPalindrome(int x){
-         string a = to_string(x);
-         string b(a.rbegin(),a.rend());
-         return a==b;
+    int maximum(int a, int b) {
+        return a>b?a:b;
     }
 };
 void Test1(Solution& s){
-    bool ret = s.isPalindrome(121);
-    if(ret){
+    int ret = s.maximum(1,2);
+    if(ret == 2){
         std::cout<<"Test1 OK"<<std::endl;
     }
     else{
@@ -22,8 +20,8 @@ void Test1(Solution& s){
 }
 
 void Test2(Solution& s){
-    bool ret = s.isPalindrome(-121);
-    if(!ret){
+    int ret = s.maximum(2,1);
+    if(ret == 2){
         std::cout<<"Test2 OK"<<std::endl;
     }
     else{
@@ -32,8 +30,8 @@ void Test2(Solution& s){
 }
 
 void Test3(Solution& s){
-    bool ret = s.isPalindrome(10);
-    if(!ret){
+    int ret = s.maximum(10, 99);
+    if(ret == 99){
         std::cout<<"Test3 OK"<<std::endl;
     }
     else{
